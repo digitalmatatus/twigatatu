@@ -1,0 +1,277 @@
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".views.RideConditions">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="30dp"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        tools:context=".Conditions">
+
+
+        <!-- <TextView
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:text="@string/app_name"
+             android:textDirection="locale" />-->
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!--<ImageView
+                    android:layout_marginTop="60dp"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:background="@color/pink"
+                    android:src="@mipmap/logo_giraffe"
+                    android:layout_gravity="center_horizontal"/>-->
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:textAlignment="center"
+                    android:id="@+id/fare_title"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Select Ride Conditions Below"
+                     />
+
+
+                <co.ceryle.radiorealbutton.library.RadioRealButtonGroup
+                    android:id="@+id/group1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    app:rrbg_backgroundColor="@android:color/transparent"
+                    app:rrbg_borderColor="@color/pink_300"
+                    app:rrbg_borderSize="1dp"
+                    app:rrbg_checkedPosition="0"
+                    app:rrbg_radius="10dp"
+                    app:rrbg_selectorColor="@color/pink_100"
+                    app:rrbg_selectorFullSize="true"
+                    app:rrbg_selectorRadius="10dp">
+
+                    <co.ceryle.radiorealbutton.library.RadioRealButton
+                        android:id="@+id/button1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:rrb_drawable="@drawable/crowd"
+                        app:rrb_drawableHeight="36dp"
+                        app:rrb_drawableWidth="36dp"
+                        app:rrb_ripple="false"
+                        app:rrb_text="Overcrowded" />
+
+                    <co.ceryle.radiorealbutton.library.RadioRealButton
+                        android:id="@+id/button2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:rrb_drawable="@drawable/person"
+                        app:rrb_drawableHeight="36dp"
+                        app:rrb_drawableWidth="36dp"
+                        app:rrb_ripple="false"
+                        app:rrb_text="Not overcrowded" />
+                </co.ceryle.radiorealbutton.library.RadioRealButtonGroup>
+
+
+                <co.ceryle.radiorealbutton.library.RadioRealButtonGroup
+                    android:id="@+id/group2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:rrbg_backgroundColor="@android:color/transparent"
+                    app:rrbg_borderColor="@color/pink_300"
+                    app:rrbg_borderSize="1dp"
+                    app:rrbg_checkedPosition="0"
+                    app:rrbg_radius="10dp"
+                    app:rrbg_selectorColor="@color/pink_100"
+                    app:rrbg_selectorFullSize="true"
+                    app:rrbg_selectorRadius="10dp">
+
+                    <co.ceryle.radiorealbutton.library.RadioRealButton
+                        android:id="@+id/button3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:rrb_drawable="@drawable/safe"
+                        app:rrb_drawableHeight="36dp"
+                        app:rrb_drawableWidth="36dp"
+                        app:rrb_ripple="false"
+                        app:rrb_text="Personally Safe" />
+
+                    <co.ceryle.radiorealbutton.library.RadioRealButton
+                        android:id="@+id/button4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:rrb_drawable="@drawable/unsafe"
+                        app:rrb_drawableHeight="36dp"
+                        app:rrb_drawableWidth="36dp"
+                        app:rrb_ripple="false"
+                        app:rrb_text="Personally Unsafe" />
+                </co.ceryle.radiorealbutton.library.RadioRealButtonGroup>
+
+                <co.ceryle.radiorealbutton.library.RadioRealButtonGroup
+                    android:id="@+id/group3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:rrbg_backgroundColor="@android:color/transparent"
+                    app:rrbg_borderColor="@color/pink_300"
+                    app:rrbg_borderSize="1dp"
+                    app:rrbg_checkedPosition="0"
+                    app:rrbg_radius="10dp"
+                    app:rrbg_selectorColor="@color/pink_100"
+                    app:rrbg_selectorFullSize="true"
+                    app:rrbg_selectorRadius="10dp">
+
+                    <co.ceryle.radiorealbutton.library.RadioRealButton
+                        android:id="@+id/button5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:rrb_drawable="@drawable/driving_safe"
+                        app:rrb_drawableHeight="36dp"
+                        app:rrb_drawableWidth="36dp"
+                        app:rrb_ripple="false"
+                        app:rrb_text="Driving safe" />
+
+                    <co.ceryle.radiorealbutton.library.RadioRealButton
+                        android:id="@+id/button6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:rrb_drawable="@drawable/driving_unsafe"
+                        app:rrb_drawableHeight="36dp"
+                        app:rrb_drawableWidth="36dp"
+                        app:rrb_ripple="false"
+                        app:rrb_text="Driving unsafe" />
+                </co.ceryle.radiorealbutton.library.RadioRealButtonGroup>
+
+
+                <co.ceryle.radiorealbutton.library.RadioRealButtonGroup
+                    android:id="@+id/group4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:rrbg_backgroundColor="@android:color/transparent"
+                    app:rrbg_borderColor="@color/pink_300"
+                    app:rrbg_borderSize="1dp"
+                    app:rrbg_checkedPosition="0"
+                    app:rrbg_radius="10dp"
+                    app:rrbg_selectorColor="@color/pink_100"
+                    app:rrbg_selectorFullSize="true"
+                    app:rrbg_selectorRadius="10dp">
+
+                    <co.ceryle.radiorealbutton.library.RadioRealButton
+                        android:id="@+id/button7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:rrb_drawable="@drawable/musics"
+                        app:rrb_drawableHeight="36dp"
+                        app:rrb_drawableWidth="36dp"
+                        app:rrb_ripple="false"
+                        app:rrb_text="Music" />
+
+                    <co.ceryle.radiorealbutton.library.RadioRealButton
+                        android:id="@+id/button8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:rrb_drawable="@drawable/no_music"
+                        app:rrb_drawableHeight="36dp"
+                        app:rrb_drawableWidth="36dp"
+                        app:rrb_ripple="false"
+                        app:rrb_text="No music" />
+                </co.ceryle.radiorealbutton.library.RadioRealButtonGroup>
+
+                <co.ceryle.radiorealbutton.library.RadioRealButtonGroup
+                    android:id="@+id/group5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:rrbg_backgroundColor="@android:color/transparent"
+                    app:rrbg_borderColor="@color/pink_300"
+                    app:rrbg_borderSize="1dp"
+                    app:rrbg_checkedPosition="0"
+                    app:rrbg_radius="10dp"
+                    app:rrbg_selectorColor="@color/pink_100"
+                    app:rrbg_selectorFullSize="true"
+                    app:rrbg_selectorRadius="10dp">
+
+                    <co.ceryle.radiorealbutton.library.RadioRealButton
+                        android:id="@+id/button9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:rrb_drawable="@drawable/internet"
+                        app:rrb_drawableHeight="36dp"
+                        app:rrb_drawableWidth="36dp"
+                        app:rrb_ripple="false"
+                        app:rrb_text="Internet Connection" />
+
+                    <co.ceryle.radiorealbutton.library.RadioRealButton
+                        android:id="@+id/button10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:rrb_drawable="@drawable/no_internet"
+                        app:rrb_drawableHeight="36dp"
+                        app:rrb_drawableWidth="36dp"
+                        app:rrb_ripple="false"
+                        app:rrb_text="No internet connection" />
+                </co.ceryle.radiorealbutton.library.RadioRealButtonGroup>
+
+                <Button
+                    android:id="@+id/submit_conditions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@color/pink"
+                    android:text="Submit" />
+
+                <!--<RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <RadioButton
+                        android:id="@+id/radio0"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/custom_button_background"
+                        android:button="@android:color/transparent"
+                        android:checked="true"
+                        android:text="RadioButton1" />
+                </RelativeLayout>-->
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+</android.support.design.widget.CoordinatorLayout>
