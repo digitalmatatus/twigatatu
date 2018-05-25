@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".views.Conditions">
+    tools:context="com.digitalmatatus.twigatatu.views.Conditions">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
@@ -83,7 +83,6 @@
                         android:background="@drawable/background"
                         android:ellipsize="start"
                         android:gravity="center"
-                        android:hint="12/12/12 12:12"
                         android:inputType="text" />
 
                     <Button
@@ -96,7 +95,7 @@
                         android:layout_marginRight="5dp"
                         android:layout_marginTop="12dp"
                         android:background="@color/pink"
-                        android:text="Pick Time"
+                        android:text="Change Time"
                         android:textColor="@color/white"
                         android:textSize="10dp" />
                 </RelativeLayout>
@@ -296,7 +295,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:background="@color/pink"
-                    android:text="Submit" />
+                    android:text="Continue" />
 
                 <!--<RelativeLayout
                     android:layout_width="match_parent"

@@ -4,7 +4,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-tools:context="twigatatu.digitalmatatus.com.newtwigatatu.views.RideConditions">
+tools:context="com.digitalmatatus.twigatatu.views.RideConditions">
 
 <include
     layout="@layout/activity_ride_conditions"

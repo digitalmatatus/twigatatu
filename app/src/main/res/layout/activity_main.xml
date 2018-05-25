@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="twigatatu.digitalmatatus.com.newtwigatatu.views.MainActivity">
+    tools:context="com.digitalmatatus.twigatatu.views.MainActivity">
 
     <include layout="@layout/content_main" />
 

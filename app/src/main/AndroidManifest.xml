@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="twigatatu.digitalmatatus.com.newtwigatatu">
+    package="com.digitalmatatus.twigatatu">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -10,10 +10,8 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
+    <!-- <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" /> -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
-
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
@@ -72,7 +70,6 @@
             </intent-filter>
         </service>
 
-
         <activity
             android:name=".MainActivity2"
             android:screenOrientation="portrait">
@@ -82,7 +79,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".RegisterActivity"
             android:screenOrientation="portrait">
@@ -101,7 +97,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".NewActivity"
             android:screenOrientation="portrait">
@@ -111,7 +106,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ReviewActivity"
             android:screenOrientation="portrait">
@@ -121,30 +115,26 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
-
-
         <activity
             android:name=".CaptureActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait">
-
-
-        </activity>
-
-
+            android:screenOrientation="portrait"></activity>
 
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version"
             tools:replace="android:value" />
-
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="b74b264b17489b1e45ffbd1064a5645f8434472d" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDXuCHVhcpZDTG6-ml6vz7EmsOEu7bbKg0"/>
+            android:value="AIzaSyDXuCHVhcpZDTG6-ml6vz7EmsOEu7bbKg0" />
+
+        <activity
+            android:name=".Settings"
+            android:label="@string/title_activity_settings"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

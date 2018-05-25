@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".NewActivity">
+    tools:context="com.digitalmatatus.twigatatu.NewActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -42,17 +42,17 @@
             android:layout_below="@+id/passengerImageView"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/notesText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@+id/passengerImageView"
-                android:layout_marginTop="10dp"
-                android:text="Route Name (optional):" />
+             <TextView
+                 android:id="@+id/notesText"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_alignParentLeft="true"
+                 android:layout_below="@+id/passengerImageView"
+                 android:layout_marginTop="10dp"
+                 android:text="Surveyor Name:" />
 
-            <!--<EditText
-                android:id="@+id/routeName"
+            <EditText
+                android:id="@+id/surveyor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -61,44 +61,24 @@
                 android:layout_below="@+id/notesText"
                 android:ems="10"
                 android:imeOptions="actionNext"
-                android:maxLines="1" />-->
+                android:maxLines="1" />
 
-            <AutoCompleteTextView
-                android:id="@+id/routeName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/notesText"
-                android:ems="10"
-                android:imeOptions="actionNext"
-                android:maxLines="1"
-                android:singleLine="true" />
-
-            <requestFocus />
-
-            <TextView
-                android:id="@+id/descriptionText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Route Description (optional):" />
-
-
-            <EditText
-                android:id="@+id/routeDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:imeOptions="actionNext"
-                android:maxLines="1"
-                android:minLines="1"
-                android:singleLine="true" />
-
+            <!--   <AutoCompleteTextView
+                   android:id="@+id/routeName"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_alignParentLeft="true"
+                   android:layout_alignParentRight="true"
+                   android:layout_below="@+id/notesText"
+                   android:ems="10"
+                   android:imeOptions="actionNext"
+                   android:maxLines="1"
+                   android:singleLine="true" />-->
             <TextView
                 android:id="@+id/idText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Route Name Auto (optional):" />
+                android:text="Route Name:" />
 
             <AutoCompleteTextView
                 android:id="@+id/routeID"
@@ -109,6 +89,23 @@
                 android:maxLines="1"
                 android:minLines="1"
                 android:singleLine="true" />
+
+            <TextView
+                android:id="@+id/descriptionText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Route Description - (optional):" />
+
+
+            <AutoCompleteTextView
+                android:id="@+id/routeDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
+                android:minLines="1"
+                android:singleLine="true" />
+
 
             <TextView
                 android:id="@+id/totalPasssengerCount"
@@ -132,7 +129,7 @@
                 android:layout_height="wrap_content"
                 android:text="Vehicle Type (optional):" />
 
-            <EditText
+            <AutoCompleteTextView
                 android:id="@+id/vehicleType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -143,7 +140,7 @@
                 android:singleLine="true">
 
 
-            </EditText>
+            </AutoCompleteTextView>
 
             <TextView
                 android:id="@+id/textView2"

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".views.MainActivity">
+    tools:context="com.digitalmatatus.twigatatu.views.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
@@ -143,7 +143,7 @@
                         android:layout_alignParentLeft="true"
                         android:id="@+id/src"
                         android:layout_marginTop="13dp"
-                        android:text="Source:" />
+                        android:text="Origin:" />
 
                     <AutoCompleteTextView
                         android:id="@+id/stop_from"
@@ -226,7 +226,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/pink"
-                    android:text="Submit" />
+                    android:text="Continue" />
 
 
             </LinearLayout>
