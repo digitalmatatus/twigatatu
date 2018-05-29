@@ -22,11 +22,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Chronometer;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.digitalmatatus.twigatatu.views.MainActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -263,10 +266,12 @@ public class CaptureActivity extends AppCompatActivity implements ICaptureActivi
 
             if (captureService.currentCapture.points.size() > 0) {
 
-                Intent intent = new Intent(getBaseContext(), ReviewActivity.class);
+                Intent intent = new Intent(getBaseContext(), MainActivity.class);
 //                intent.putExtra("routes",captureService.currentCapture);
+                intent.putExtra("continuation", "continuation");
+
                 startActivity(intent);
-                Toast.makeText(CaptureActivity.this, "Capture complete.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CaptureActivity.this, "Capture complete!", Toast.LENGTH_SHORT).show();
 
             } else
                 Toast.makeText(CaptureActivity.this, "No data collected, canceling.", Toast.LENGTH_SHORT).show();
@@ -284,8 +289,11 @@ public class CaptureActivity extends AppCompatActivity implements ICaptureActivi
 
         initButtons();
 
-        Intent finishCaptureIntent = new Intent(CaptureActivity.this, MainActivity2.class);
-        finishCaptureIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        Intent finishCaptureIntent = new Intent(CaptureActivity.this, MainActivity.class);
+//        finishCaptureIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        finishCaptureIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        finishCaptureIntent.putExtra("continuation", "continuation");
+
         startActivity(finishCaptureIntent);
     }
 
@@ -350,6 +358,8 @@ public class CaptureActivity extends AppCompatActivity implements ICaptureActivi
                 vibratorService.vibrate(25);
 
             } else {
+//                Capturing ariveAtStop after getting the route name
+                setRouteName();
                 captureService.ariveAtStop();
 
                 ImageButton transitCaptureButton = (ImageButton) findViewById(R.id.transitStopButton);
@@ -598,13 +608,13 @@ public class CaptureActivity extends AppCompatActivity implements ICaptureActivi
     private void groupData() {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("route_name", Utils.getDefaults("route_name",getBaseContext()));
-            jsonObject.put("description", Utils.getDefaults("route_description",getBaseContext()));
-            jsonObject.put("notes", Utils.getDefaults("field_notes",getBaseContext()));
-            jsonObject.put("vehicle_capacity", Utils.getDefaults("vehicle_capacity",getBaseContext()));
-            jsonObject.put("vehicle_type", Utils.getDefaults("vehicle_type",getBaseContext()));
-            jsonObject.put("startTime", Utils.getDefaults("start_time",getBaseContext()));
-            jsonObject.put("route_id", Utils.getDefaults("route_id",getBaseContext()));
+            jsonObject.put("route_name", Utils.getDefaults("route_name", getBaseContext()));
+            jsonObject.put("description", Utils.getDefaults("route_description", getBaseContext()));
+            jsonObject.put("notes", Utils.getDefaults("field_notes", getBaseContext()));
+            jsonObject.put("vehicle_capacity", Utils.getDefaults("vehicle_capacity", getBaseContext()));
+            jsonObject.put("vehicle_type", Utils.getDefaults("vehicle_type", getBaseContext()));
+            jsonObject.put("startTime", Utils.getDefaults("start_time", getBaseContext()));
+            jsonObject.put("route_id", Utils.getDefaults("route_id", getBaseContext()));
             JSONArray jsonArray = null;
             if (Utils.checkDefaults("routes", getBaseContext())) {
                 try {
@@ -614,12 +624,12 @@ public class CaptureActivity extends AppCompatActivity implements ICaptureActivi
                 }
                 Utils.setDefaults("routes", jsonArray.toString(), getBaseContext());
             } else {
-                Toast.makeText(getBaseContext(),"No route  data",Toast.LENGTH_LONG);
-                Log.e("No route  data","No route  data");
+                Toast.makeText(getBaseContext(), "No route  data", Toast.LENGTH_LONG);
+                Log.e("No route  data", "No route  data");
             }
 
-            jsonObject.put("route",jsonArray);
-            JSONArray jsonArray2= null;
+            jsonObject.put("route", jsonArray);
+            JSONArray jsonArray2 = null;
 
             if (Utils.checkDefaults("stops", getBaseContext())) {
                 try {
@@ -628,10 +638,10 @@ public class CaptureActivity extends AppCompatActivity implements ICaptureActivi
                     e.printStackTrace();
                 }
             } else {
-                Toast.makeText(getBaseContext(),"No stops data",Toast.LENGTH_LONG);
-                Log.e("No stops data","No stops  data");
+                Toast.makeText(getBaseContext(), "No stops data", Toast.LENGTH_LONG);
+                Log.e("No stops data", "No stops  data");
             }
-            jsonObject.put("stops",jsonArray2);
+            jsonObject.put("stops", jsonArray2);
 
             if (Utils.checkDefaults("data", getBaseContext())) {
                 JSONArray jsonArray1;
@@ -650,11 +660,63 @@ public class CaptureActivity extends AppCompatActivity implements ICaptureActivi
 
             }
 
-            Log.e("DATA to upload is", Utils.getDefaults("data",getBaseContext()));
+            Log.e("DATA to upload is", Utils.getDefaults("data", getBaseContext()));
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
+
+    protected void setRouteName() {
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(CaptureActivity.this);
+
+        alertDialogBuilder.setTitle("Route Name");
+        alertDialogBuilder.setMessage("Enter Route Name below");
+
+        LinearLayout layout = new LinearLayout(CaptureActivity.this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+
+        final EditText et = new EditText(CaptureActivity.this);
+        layout.addView(et);
+
+
+        alertDialogBuilder.setView(layout);
+
+        alertDialogBuilder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+//                Utils.setDefaults("url", et.getText().toString(), MainActivity.this);
+                /*if (et.getText().toString().equals("dm2018")) {
+                    Intent intent = new Intent(getBaseContext(), Settings.class);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                    startActivity(intent);
+                }*/
+
+            }
+        });
+
+        alertDialogBuilder.setNegativeButton("Close & Finish", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+
+
+            }
+        });
+
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        // show alert
+        alertDialog.show();
+
+    }
+
 
 }

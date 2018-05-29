@@ -1,5 +1,6 @@
 package com.digitalmatatus.twigatatu;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -7,6 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+
+import com.digitalmatatus.twigatatu.utils.Utils;
+import com.digitalmatatus.twigatatu.views.MainActivity;
 
 import net.igenius.customcheckbox.CustomCheckBox;
 
@@ -25,17 +29,14 @@ public class Settings extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CustomCheckBox checkBox, boolean isChecked) {
                 Log.d("CustomCheckBox", String.valueOf(isChecked));
+                Utils.setDefaults("data_collection","enabled",getBaseContext());
+                Intent intent = new Intent(getBaseContext(), MainActivity2.class);
+                startActivity(intent);
+
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
     }
 
 }

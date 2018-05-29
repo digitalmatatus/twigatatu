@@ -8,17 +8,20 @@
     tools:context="com.digitalmatatus.twigatatu.Settings"
     tools:showIn="@layout/activity_settings">
 
-    <TextView
+   <!-- <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Admin Panel"
-        android:textAlignment="center"
-        />
+        android:layout_marginTop="100dp"
+        android:textSize="30dp"
+        android:id="@+id/tv"
+        />-->
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_below="@+id/tv">
         <net.igenius.customcheckbox.CustomCheckBox
             android:id="@+id/scb"
             android:layout_width="30dp"
@@ -34,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Tick if you are you a data collection" />
+            android:text="Tick if you are you a data collector" />
     </RelativeLayout>
 
 

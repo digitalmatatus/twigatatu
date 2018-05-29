@@ -134,6 +134,9 @@
             android:name=".Settings"
             android:label="@string/title_activity_settings"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".views.MyIntro"
+            android:label="@string/title_activity_my_intro" />
     </application>
 
 </manifest>

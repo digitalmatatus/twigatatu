@@ -1,6 +1,8 @@
 package com.digitalmatatus.twigatatu.views;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.IntentCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -15,6 +17,7 @@ import org.json.JSONObject;
 import Interface.ServerCallback;
 import co.ceryle.radiorealbutton.library.RadioRealButton;
 import co.ceryle.radiorealbutton.library.RadioRealButtonGroup;
+
 import com.digitalmatatus.twigatatu.MainActivity2;
 import com.digitalmatatus.twigatatu.R;
 import com.digitalmatatus.twigatatu.controllers.PostData;
@@ -147,7 +150,7 @@ public class RideConditions extends AppCompatActivity {
 
                         @Override
                         public void onSuccess(JSONObject response) {
-                            Log.e("response",response.toString());
+                            Log.e("response", response.toString());
 
                         }
                     });
@@ -156,13 +159,25 @@ public class RideConditions extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                showProceed("Are you a surveyor collecting route information? Click yes and turn on your location/GPS", RideConditions.this, MainActivity2.class, RadarChartActivity.class);
+
+//                showProceed("Are you a surveyor collecting route information? Click yes and turn on your location/GPS", RideConditions.this, MainActivity2.class, RadarChartActivity.class);
+
+                if (Utils.checkDefaults("data_collection", getBaseContext())) {
+                    if (Utils.getDefaults("data_collection", getBaseContext()).equals("enabled")) {
+//                finishAffinity();
+                        Intent intent = new Intent(getBaseContext(), MainActivity2.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(getBaseContext(), RadarChartActivity.class);
+                        startActivity(intent);
+                    }
+                } else {
+                    Intent intent = new Intent(getBaseContext(), RadarChartActivity.class);
+                    startActivity(intent);
+                }
 
 
-//                postFare();
-
-//                Intent intent = new Intent(getBaseContext(),RadarChartActivity.class);
-//                startActivity(intent);
             }
         });
 

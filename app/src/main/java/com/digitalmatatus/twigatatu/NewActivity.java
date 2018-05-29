@@ -1,15 +1,20 @@
 package com.digitalmatatus.twigatatu;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Looper;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -31,6 +36,17 @@ import com.digitalmatatus.twigatatu.R;
 
 import com.digitalmatatus.twigatatu.controllers.GetData;
 import com.digitalmatatus.twigatatu.utils.Utils;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.location.LocationSettingsStates;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 public class NewActivity extends Activity {
 
@@ -45,6 +61,7 @@ public class NewActivity extends Activity {
     private String stopTo = null, stopFrom = null;
     private boolean mIsBound;
     private static final int REQUEST_FINE_LOCATION = 0;
+    private static final int MY_PERMISSIONS_REQUEST_READ_PHONE_STATE = 0;
 
 
     private final ServiceConnection caputreServiceConnection = new ServiceConnection() {
@@ -380,6 +397,8 @@ public class NewActivity extends Activity {
         }
 
     }
+
+
 
 
 }

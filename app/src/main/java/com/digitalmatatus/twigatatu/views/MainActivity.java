@@ -1,9 +1,14 @@
 package com.digitalmatatus.twigatatu.views;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.content.IntentCompat;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -15,6 +20,8 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
@@ -27,7 +34,9 @@ import java.util.ArrayList;
 import Interface.ServerCallback;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import com.digitalmatatus.twigatatu.MainActivity2;
 import com.digitalmatatus.twigatatu.R;
+import com.digitalmatatus.twigatatu.Settings;
 import com.digitalmatatus.twigatatu.controllers.GetData;
 import com.digitalmatatus.twigatatu.utils.Utils;
 
@@ -61,9 +70,52 @@ public class MainActivity extends AppCompatActivity {
         setTitle("Twiga Tatu");
         applyFontForToolbarTitle(this);
 
+        if (Utils.checkDefaults("data_collection", getBaseContext())) {
+            if (Utils.getDefaults("data_collection", getBaseContext()).equals("enabled") && getIntent().getStringExtra("continuation") == null) {
+//                finishAffinity();
+                Intent intent = new Intent(getBaseContext(), MainActivity2.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+        } else {
+            Utils.setDefaults("data_collection", "disabled", getBaseContext());
+
+        }
+
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //  Initialize SharedPreferences
+                SharedPreferences getPrefs = PreferenceManager
+                        .getDefaultSharedPreferences(getBaseContext());
+
+                //  Create a new boolean and preference and set it to true
+                boolean isFirstStart = getPrefs.getBoolean("firstStart", true);
+
+                //  If the activity has never started before...
+                if (isFirstStart) {
+
+                    //  Launch app intro
+                    Intent i = new Intent(MainActivity.this, MyIntro.class);
+                    startActivity(i);
+
+                    //  Make a new preferences editor
+                    SharedPreferences.Editor e = getPrefs.edit();
+
+                    //  Edit preference to make it false because we don't want this to run again
+                    e.putBoolean("firstStart", false);
+
+                    //  Apply changes
+                    e.apply();
+                }
+            }
+        });
+
+        // Start the thread
+        t.start();
+
 
         showStops();
-
 
 //        Setting the custom font for the wordings
         mTfRegular = Typeface.createFromAsset(getAssets(), "OpenSans-Regular.ttf");
@@ -114,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
 
         Button button = findViewById(R.id.submit_fare);
         button.setTypeface(mTfLight);
@@ -170,6 +223,7 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            setDataCollectionMode();
             return true;
         }
 
@@ -187,7 +241,6 @@ public class MainActivity extends AppCompatActivity {
 //                    JSONArray stops = jsonObject.getJSONArray("stops");
 
                     JSONArray stops = new JSONArray(result);
-
 
 
                     for (int i = 0; i < stops.length(); i++) {
@@ -241,4 +294,56 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    protected void setDataCollectionMode() {
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+
+        alertDialogBuilder.setTitle("Data Collection Mode");
+        alertDialogBuilder.setMessage("Type the password to enable data collection mode");
+
+        LinearLayout layout = new LinearLayout(MainActivity.this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+
+        final EditText et = new EditText(MainActivity.this);
+        layout.addView(et);
+
+
+        alertDialogBuilder.setView(layout);
+
+        alertDialogBuilder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+//                Utils.setDefaults("url", et.getText().toString(), MainActivity.this);
+                if (et.getText().toString().equals("dm2018")) {
+                    Intent intent = new Intent(getBaseContext(), Settings.class);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                    startActivity(intent);
+                }
+
+            }
+        });
+
+        alertDialogBuilder.setNegativeButton("Close & Finish", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+
+
+            }
+        });
+
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        // show alert
+        alertDialog.show();
+
+    }
+
 }
