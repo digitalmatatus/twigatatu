@@ -17,8 +17,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.digitalmatatus.twigatatu.R;
-import com.digitalmatatus.twigatatu.views.MainActivity;
+import com.digitalmatatus.twigatatu.utils.Util;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;

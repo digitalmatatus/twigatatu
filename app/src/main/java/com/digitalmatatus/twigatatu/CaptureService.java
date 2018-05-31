@@ -27,8 +27,7 @@ import android.support.v4.app.NotificationCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
-import com.digitalmatatus.twigatatu.R;
-
+import com.digitalmatatus.twigatatu.utils.Util;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.DetectedActivity;
@@ -52,6 +51,7 @@ import io.nlopez.smartlocation.OnLocationUpdatedListener;
 import io.nlopez.smartlocation.SmartLocation;
 import io.nlopez.smartlocation.geofencing.utils.TransitionGeofence;
 import io.nlopez.smartlocation.location.providers.LocationGooglePlayServicesProvider;
+
 import com.digitalmatatus.twigatatu.utils.Utils;
 
 
@@ -661,7 +661,7 @@ public class CaptureService extends Service implements GoogleApiClient.Connectio
     }
 
 
-//    Function for stopping location updates from network provider
+    //    Function for stopping location updates from network provider
     private void stopLocation() {
         SmartLocation.with(this).location().stop();
 
@@ -689,13 +689,14 @@ public class CaptureService extends Service implements GoogleApiClient.Connectio
                 Log.e("min accuracy", MIN_ACCURACY * 2 + "");
             }*/
 
-//TODO removed && location.getAccuracy() < MIN_ACCURACY * 2
-            if (currentCapture != null) {
+//TODO check on the min_accuracy
+
+            if (currentCapture != null && location.getAccuracy() < MIN_ACCURACY * 2) {
 
                 RoutePoint rp = new RoutePoint();
                 rp.location = location;
                 rp.time = SystemClock.elapsedRealtime();
-                Log.e("inside current cap", "IIIIII");
+                Log.e("Network Location", "Network Location");
 
                 JSONObject jsonObject = new JSONObject();
                 try {

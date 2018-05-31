@@ -36,7 +36,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 import com.digitalmatatus.twigatatu.MainActivity2;
 import com.digitalmatatus.twigatatu.R;
-import com.digitalmatatus.twigatatu.Settings;
 import com.digitalmatatus.twigatatu.controllers.GetData;
 import com.digitalmatatus.twigatatu.utils.Utils;
 
@@ -317,9 +316,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-//                Utils.setDefaults("url", et.getText().toString(), MainActivity.this);
                 if (et.getText().toString().equals("dm2018")) {
-                    Intent intent = new Intent(getBaseContext(), Settings.class);
+                    Utils.setDefaults("data_collection", "enabled", getBaseContext());
+                    Utils.showToast("Data collection mode enabled!", getBaseContext());
+                    Intent intent = new Intent(getBaseContext(), MainActivity2.class);
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(getBaseContext(), MainActivity.class);

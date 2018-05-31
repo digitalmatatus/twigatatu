@@ -1,4 +1,4 @@
-package com.digitalmatatus.twigatatu;
+package com.digitalmatatus.twigatatu.views;
 
 import android.graphics.Color;
 import android.os.Bundle;

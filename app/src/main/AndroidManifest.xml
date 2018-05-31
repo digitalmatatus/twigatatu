@@ -79,7 +79,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RegisterActivity"
+            android:name=".views.RegisterActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -88,7 +88,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ShowMap"
+            android:name=".views.ShowMap"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -131,7 +131,7 @@
             android:value="AIzaSyDXuCHVhcpZDTG6-ml6vz7EmsOEu7bbKg0" />
 
         <activity
-            android:name=".Settings"
+            android:name=".views.Settings"
             android:label="@string/title_activity_settings"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity

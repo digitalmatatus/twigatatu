@@ -1,4 +1,4 @@
-package com.digitalmatatus.twigatatu;
+package com.digitalmatatus.twigatatu.views;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.digitalmatatus.twigatatu.CaptureService;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;

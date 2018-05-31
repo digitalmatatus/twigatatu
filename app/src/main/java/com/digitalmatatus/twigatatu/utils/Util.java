@@ -1,4 +1,4 @@
-package com.digitalmatatus.twigatatu;
+package com.digitalmatatus.twigatatu.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;

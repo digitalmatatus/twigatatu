@@ -3,6 +3,7 @@ package com.digitalmatatus.twigatatu;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -21,14 +22,20 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Chronometer;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.digitalmatatus.twigatatu.controllers.GetData;
+import com.digitalmatatus.twigatatu.utils.Util;
 import com.digitalmatatus.twigatatu.views.MainActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -47,10 +54,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
-
-import com.digitalmatatus.twigatatu.R;
+import java.util.ArrayList;
 
 import com.digitalmatatus.twigatatu.utils.Utils;
+
+import Interface.ServerCallback;
 
 public class CaptureActivity extends AppCompatActivity implements ICaptureActivity, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
@@ -61,6 +69,11 @@ public class CaptureActivity extends AppCompatActivity implements ICaptureActivi
     private static final int REQUEST_FINE_LOCATION = 0;
     private boolean registered = false;
     private boolean mIsBound;
+
+
+    ArrayList<String> stopIDs = new ArrayList<>();
+    ArrayList<String> stopList = new ArrayList<>();
+    ArrayList<String> routeIDs = new ArrayList<>();
 
 
     private static final int MY_PERMISSIONS_REQUEST_READ_PHONE_STATE = 0;
@@ -89,8 +102,8 @@ public class CaptureActivity extends AppCompatActivity implements ICaptureActivi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_capture);
-
         setTitle("Twiga Tatu");
+        showStops();
 //        applyFontForToolbarTitle(this);
 
         // Start the service in case it isn't already running
@@ -671,15 +684,43 @@ public class CaptureActivity extends AppCompatActivity implements ICaptureActivi
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(CaptureActivity.this);
 
-        alertDialogBuilder.setTitle("Route Name");
-        alertDialogBuilder.setMessage("Enter Route Name below");
+        alertDialogBuilder.setTitle("Stop Name");
+        alertDialogBuilder.setMessage("Enter stop name below");
 
         LinearLayout layout = new LinearLayout(CaptureActivity.this);
         layout.setOrientation(LinearLayout.VERTICAL);
 
+        final AutoCompleteTextView autoCompleteTextView = new AutoCompleteTextView(CaptureActivity.this);
 
-        final EditText et = new EditText(CaptureActivity.this);
-        layout.addView(et);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(),
+                android.R.layout.simple_dropdown_item_1line, stopList);
+        autoCompleteTextView.setAdapter(adapter);
+        layout.addView(autoCompleteTextView);
+
+        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (in != null) {
+                    in.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+                }
+                autoCompleteTextView.setText(adapter.getItem(position));
+
+                Log.e("stop_from is", adapter.getItem(position));
+            }
+        });
+
+        TextView hint = new TextView (CaptureActivity.this);
+        hint.setText("Choose below - Designated/ Undesignated");
+        layout.addView(hint);
+
+
+
+        Spinner dropdown = new Spinner (CaptureActivity.this);
+        String[] items = new String[]{"Designated", "Undesignated"};
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
+        dropdown.setAdapter(adapter2);
+        layout.addView(dropdown);
 
 
         alertDialogBuilder.setView(layout);
@@ -689,19 +730,11 @@ public class CaptureActivity extends AppCompatActivity implements ICaptureActivi
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-//                Utils.setDefaults("url", et.getText().toString(), MainActivity.this);
-                /*if (et.getText().toString().equals("dm2018")) {
-                    Intent intent = new Intent(getBaseContext(), Settings.class);
-                    startActivity(intent);
-                } else {
-                    Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                    startActivity(intent);
-                }*/
 
             }
         });
 
-        alertDialogBuilder.setNegativeButton("Close & Finish", new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -713,9 +746,42 @@ public class CaptureActivity extends AppCompatActivity implements ICaptureActivi
 
 
         AlertDialog alertDialog = alertDialogBuilder.create();
-        // show alert
         alertDialog.show();
 
+    }
+
+    private void showStops() {
+        final ProgressDialog pd = new ProgressDialog(CaptureActivity.this);
+        pd.setMessage("loading stops");
+        pd.show();
+        pd.setCancelable(true);
+        GetData stops = new GetData(getBaseContext());
+        stops.online_stops("stops", new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+                Log.e("result", result.toString());
+                try {
+                    JSONArray stops = new JSONArray(result);
+
+
+                    for (int i = 0; i < stops.length(); i++) {
+                        stopList.add(stops.getJSONObject(i).getString("name"));
+                        stopIDs.add(stops.getJSONObject(i).getString("id"));
+                        routeIDs.add(stops.getJSONObject(i).getString("stop_id"));
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                pd.dismiss();
+
+            }
+
+            @Override
+            public void onSuccess(JSONObject response) {
+
+            }
+        });
     }
 
 
