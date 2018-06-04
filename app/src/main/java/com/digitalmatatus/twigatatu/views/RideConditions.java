@@ -18,20 +18,18 @@ import Interface.ServerCallback;
 import co.ceryle.radiorealbutton.library.RadioRealButton;
 import co.ceryle.radiorealbutton.library.RadioRealButtonGroup;
 
-import com.digitalmatatus.twigatatu.MainActivity2;
 import com.digitalmatatus.twigatatu.R;
 import com.digitalmatatus.twigatatu.controllers.PostData;
 import com.digitalmatatus.twigatatu.utils.Utils;
 
 import static com.digitalmatatus.twigatatu.utils.Utils.applyFontForToolbarTitle;
 import static com.digitalmatatus.twigatatu.utils.Utils.font;
-import static com.digitalmatatus.twigatatu.utils.Utils.showProceed;
 
 public class RideConditions extends AppCompatActivity {
 
     private RadioRealButton button1, button2, button3, button4, button5, button6, button7, button8, button9, button10;
     private RadioRealButtonGroup group1, group2, group3, group4, group5;
-    private String internet = "internet Hour", music = "music Hour", drive_safety = "High drive_safety", safety = "High safety", crowd = "Good crowd";
+    private String internet = "Internet Connection", music = "Music", drive_safety = "Driving safe", safety = "Personally Safe", air = "Good Air-Quality";
     EditText editText;
 
     @Override
@@ -67,7 +65,7 @@ public class RideConditions extends AppCompatActivity {
             @Override
             public void onPositionChanged(RadioRealButton button, int position) {
 //                Utils.showToast(button.getText().toString(), getBaseContext());
-                internet = button.getText().toString();
+                air = button.getText().toString();
                 Log.e("internet", button.getText().toString());
 //                updateText(position, button1);
             }
@@ -105,7 +103,7 @@ public class RideConditions extends AppCompatActivity {
             @Override
             public void onPositionChanged(RadioRealButton button, int position) {
 //                Utils.showToast(button.getText().toString(), getBaseContext());
-                crowd = button.getText().toString();
+                internet = button.getText().toString();
 //                updateText(position, button1);
             }
         });
@@ -131,7 +129,7 @@ public class RideConditions extends AppCompatActivity {
                 JSONObject fares;
                 try {
                     fares = new JSONObject(s_fare);
-                    fares.put("crowd", crowd);
+                    fares.put("air_quality", air);
                     fares.put("safety", safety);
                     fares.put("drive_safety", drive_safety);
                     fares.put("music", music);

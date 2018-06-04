@@ -19,7 +19,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.digitalmatatus.twigatatu.CaptureService;
+import com.digitalmatatus.twigatatu.views.CaptureService;
 import com.digitalmatatus.twigatatu.R;
 
 import java.util.HashMap;

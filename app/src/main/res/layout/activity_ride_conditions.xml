@@ -93,7 +93,7 @@
                         app:rrb_drawableHeight="36dp"
                         app:rrb_drawableWidth="36dp"
                         app:rrb_ripple="false"
-                        app:rrb_text="Not overcrowded" />
+                        app:rrb_text="Good Air-Quality" />
 
                     <co.ceryle.radiorealbutton.library.RadioRealButton
                         android:id="@+id/button1"
@@ -103,7 +103,7 @@
                         app:rrb_drawableHeight="36dp"
                         app:rrb_drawableWidth="36dp"
                         app:rrb_ripple="false"
-                        app:rrb_text="Overcrowded" />
+                        app:rrb_text="Bad Air-Quality" />
 
                 </co.ceryle.radiorealbutton.library.RadioRealButtonGroup>
 

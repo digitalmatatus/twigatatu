@@ -166,21 +166,21 @@
                         android:id="@+id/button3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:rrb_drawable="@drawable/icon_crowdsourcing"
+                        app:rrb_drawable="@drawable/crowd"
                         app:rrb_drawableHeight="36dp"
                         app:rrb_drawableWidth="36dp"
                         app:rrb_ripple="false"
-                        app:rrb_text="Rush Hour" />
+                        app:rrb_text="Overcrowded" />
 
                     <co.ceryle.radiorealbutton.library.RadioRealButton
                         android:id="@+id/button4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:rrb_drawable="@drawable/icon_crowdsourcing_gray"
+                        app:rrb_drawable="@drawable/person"
                         app:rrb_drawableHeight="36dp"
                         app:rrb_drawableWidth="36dp"
                         app:rrb_ripple="false"
-                        app:rrb_text="Non-Rush Hour" />
+                        app:rrb_text="Not Overcrowded" />
                 </co.ceryle.radiorealbutton.library.RadioRealButtonGroup>
 
                 <co.ceryle.radiorealbutton.library.RadioRealButtonGroup

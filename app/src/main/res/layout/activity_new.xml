@@ -3,12 +3,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.digitalmatatus.twigatatu.NewActivity">
+    tools:context="com.digitalmatatus.twigatatu.views.NewActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -129,24 +141,32 @@
                 android:layout_height="wrap_content"
                 android:text="Vehicle Type (optional):" />
 
-            <AutoCompleteTextView
-                android:id="@+id/vehicleType"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:imeOptions="actionNext"
-                android:maxLines="1"
-                android:minLines="1"
-                android:singleLine="true">
+               >
+                <AutoCompleteTextView
+                    android:id="@+id/vehicleType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:imeOptions="actionNext"
+                    android:maxLines="1"
+                    android:minLines="1"
+                    android:singleLine="true">
 
 
-            </AutoCompleteTextView>
+                </AutoCompleteTextView>
+
+            </android.support.design.widget.TextInputLayout>
+
+
 
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Vehicle Capacity (optional):" />
+                android:text="Vehicle Capacity:" />
 
             <EditText
                 android:id="@+id/vehicleCapacity"
@@ -156,6 +176,25 @@
 
                 android:imeOptions="actionDone"
                 android:inputType="number" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Is vehicle full?" />
+
+            <Spinner
+                android:id="@+id/vehicleFull"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
+                android:minLines="1"
+                android:singleLine="true">
+
+
+            </Spinner>
 
             <Button
                 android:id="@+id/ContinueButton"

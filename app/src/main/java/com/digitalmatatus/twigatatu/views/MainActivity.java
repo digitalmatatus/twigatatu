@@ -34,7 +34,6 @@ import java.util.ArrayList;
 import Interface.ServerCallback;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import com.digitalmatatus.twigatatu.MainActivity2;
 import com.digitalmatatus.twigatatu.R;
 import com.digitalmatatus.twigatatu.controllers.GetData;
 import com.digitalmatatus.twigatatu.utils.Utils;
@@ -329,7 +328,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        alertDialogBuilder.setNegativeButton("Close & Finish", new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {

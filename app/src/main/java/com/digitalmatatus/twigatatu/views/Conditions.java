@@ -35,7 +35,7 @@ public class Conditions extends AppCompatActivity implements TimePickerDialog.On
 
     private RadioRealButton button1, button2, button3, button4, button5, button6, button7, button8, button9, button10;
     private RadioRealButtonGroup group1, group2, group3, group4, group5;
-    private String peak = "Peak Hour", rush = "Rush Hour", demand = "High Demand", traffic = "High Traffic", weather = "Good Weather";
+    private String peak = "Peak Hour", crowded = "Overcrowded", demand = "High Demand", traffic = "High Traffic", weather = "Good Weather";
     EditText editText;
 
     @Override
@@ -101,8 +101,8 @@ public class Conditions extends AppCompatActivity implements TimePickerDialog.On
         group2.setOnPositionChangedListener(new RadioRealButtonGroup.OnPositionChangedListener() {
             @Override
             public void onPositionChanged(RadioRealButton button, int position) {
-                rush = button.getText().toString();
-                Log.e("rush", button.getText().toString());
+                crowded = button.getText().toString();
+                Log.e("crowded", button.getText().toString());
 
             }
         });
@@ -152,7 +152,7 @@ public class Conditions extends AppCompatActivity implements TimePickerDialog.On
                     fares.put("weather", weather);
                     fares.put("traffic_jam", traffic);
                     fares.put("demand", demand);
-                    fares.put("rush_hour", rush);
+                    fares.put("crowd", crowded);
                     fares.put("peak", peak);
                     fares.put("user_id", Utils.getDefaults("user_id", getBaseContext()));
                     fares.put("travel_time", editText.getText().toString());

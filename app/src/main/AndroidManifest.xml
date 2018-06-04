@@ -63,14 +63,15 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".CaptureService">
+        <service android:name=".views.CaptureService">
             <intent-filter>
                 <action android:name=".CaptureService" />
             </intent-filter>
         </service>
 
         <activity
-            android:name=".MainActivity2"
+            android:name=".views.MainActivity2"
+            android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -97,7 +98,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NewActivity"
+            android:name=".views.NewActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -106,7 +108,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ReviewActivity"
+            android:name=".views.ReviewActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -115,8 +118,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CaptureActivity"
+            android:name=".views.CaptureActivity"
             android:launchMode="singleTop"
+            android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"></activity>
 
         <meta-data
