@@ -58,6 +58,7 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import com.digitalmatatus.twigatatu.utils.Utils;
 
@@ -133,7 +134,6 @@ public class CaptureActivity extends AppCompatActivity implements ICaptureActivi
 
         TextView upload = findViewById(R.id.uploadText);
         upload.setTypeface(mTfLight);
-
 
 
         // Start the service in case it isn't already running
@@ -220,22 +220,22 @@ public class CaptureActivity extends AppCompatActivity implements ICaptureActivi
             }
         };
 
-        ImageButton startCaptureButton =  findViewById(R.id.StartCaptureButton);
+        ImageButton startCaptureButton = findViewById(R.id.StartCaptureButton);
         startCaptureButton.setOnClickListener(listener);
 
-        ImageButton stopCaptureButton =  findViewById(R.id.StopCaptureButton);
+        ImageButton stopCaptureButton = findViewById(R.id.StopCaptureButton);
         stopCaptureButton.setOnClickListener(listener);
 
-        ImageButton transitStopButton =  findViewById(R.id.transitStopButton);
+        ImageButton transitStopButton = findViewById(R.id.transitStopButton);
         transitStopButton.setOnClickListener(listener);
 
         ImageButton passengerAlightButton = findViewById(R.id.PassengerAlightButton);
         passengerAlightButton.setOnClickListener(listener);
 
-        ImageButton passengerBoardButton =findViewById(R.id.PassengerBoardButton);
+        ImageButton passengerBoardButton = findViewById(R.id.PassengerBoardButton);
         passengerBoardButton.setOnClickListener(listener);
 
-        ImageView passengerImageView =  findViewById(R.id.passengerImageView);
+        ImageView passengerImageView = findViewById(R.id.passengerImageView);
         passengerImageView.setAlpha(128);
 
         initButtons();
@@ -250,20 +250,20 @@ public class CaptureActivity extends AppCompatActivity implements ICaptureActivi
     private void initButtons() {
 
         if (captureService == null) {
-            ImageButton startCaptureButton =  findViewById(R.id.StartCaptureButton);
+            ImageButton startCaptureButton = findViewById(R.id.StartCaptureButton);
             startCaptureButton.setImageResource(R.drawable.start_button_gray);
 
-            ImageButton stopCaptureButton =  findViewById(R.id.StopCaptureButton);
+            ImageButton stopCaptureButton = findViewById(R.id.StopCaptureButton);
             stopCaptureButton.setImageResource(R.drawable.stop_button_gray);
         } else if (captureService.capturing) {
-            ImageButton startCaptureButton =  findViewById(R.id.StartCaptureButton);
+            ImageButton startCaptureButton = findViewById(R.id.StartCaptureButton);
             startCaptureButton.setImageResource(R.drawable.start_button_gray);
 
             ImageButton stopCaptureButton = findViewById(R.id.StopCaptureButton);
             stopCaptureButton.setImageResource(R.drawable.stop_button);
         } else if (!captureService.capturing && captureService.currentCapture == null) {
 
-            ImageButton startCaptureButton =  findViewById(R.id.StartCaptureButton);
+            ImageButton startCaptureButton = findViewById(R.id.StartCaptureButton);
             startCaptureButton.setImageResource(R.drawable.start_button_gray);
 
             ImageButton stopCaptureButton = findViewById(R.id.StopCaptureButton);
@@ -656,6 +656,13 @@ public class CaptureActivity extends AppCompatActivity implements ICaptureActivi
     }
 
     private void groupData() {
+
+        long end = new Date().getTime();
+
+        long start = Long.parseLong(Utils.getDefaults("start_time", getBaseContext()));
+
+        long duration = end - start;
+        int mins = (int) (duration / (1000 * 60));
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("route_name", Utils.getDefaults("route_name", getBaseContext()));
@@ -663,9 +670,14 @@ public class CaptureActivity extends AppCompatActivity implements ICaptureActivi
             jsonObject.put("notes", Utils.getDefaults("field_notes", getBaseContext()));
             jsonObject.put("vehicle_capacity", Utils.getDefaults("vehicle_capacity", getBaseContext()));
             jsonObject.put("vehicle_type", Utils.getDefaults("vehicle_type", getBaseContext()));
-            jsonObject.put("startTime", Utils.getDefaults("start_time", getBaseContext()));
+            jsonObject.put("start_time", Utils.getDefaults("start_time", getBaseContext()));
             jsonObject.put("route_id", Utils.getDefaults("route_id", getBaseContext()));
             jsonObject.put("surveyor_name", Utils.getDefaults("surveyor", getBaseContext()));
+            jsonObject.put("vehicle_full", Utils.getDefaults("vehicle_full", getBaseContext()));
+            jsonObject.put("new_route", Utils.getDefaults("new_route", getBaseContext()));
+            jsonObject.put("direction", Utils.getDefaults("direction", getBaseContext()));
+//            jsonObject.put("trip_duration", Utils.getDefaults("trip_duration", getBaseContext()));
+            jsonObject.put("trip_duration", mins);
 
 
             JSONArray jsonArray = null;
@@ -757,7 +769,6 @@ public class CaptureActivity extends AppCompatActivity implements ICaptureActivi
         layout.addView(hint);
 
 
-
         final Spinner designation = new Spinner(CaptureActivity.this);
         String[] items = new String[]{"Designated", "Undesignated"};
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
@@ -773,7 +784,7 @@ public class CaptureActivity extends AppCompatActivity implements ICaptureActivi
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
-    });
+        });
 
 
         alertDialogBuilder.setView(layout);
@@ -783,7 +794,7 @@ public class CaptureActivity extends AppCompatActivity implements ICaptureActivi
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                captureService.ariveAtStop(autoCompleteTextView.getText().toString(),selectedItem);
+                captureService.ariveAtStop(autoCompleteTextView.getText().toString(), selectedItem);
             }
         });
 
@@ -791,7 +802,7 @@ public class CaptureActivity extends AppCompatActivity implements ICaptureActivi
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                captureService.ariveAtStop("","");
+                captureService.ariveAtStop("", "");
                 dialog.cancel();
 
 
@@ -808,7 +819,7 @@ public class CaptureActivity extends AppCompatActivity implements ICaptureActivi
         final ProgressDialog pd = new ProgressDialog(CaptureActivity.this);
         pd.setMessage("loading stops");
         pd.show();
-        pd.setCancelable(true);
+        pd.setCancelable(false);
         GetData stops = new GetData(getBaseContext());
         stops.online_stops("stops", new ServerCallback() {
             @Override

@@ -1,3 +1,4 @@
+/*
 package com.digitalmatatus.twigatatu.views;
 
 import android.graphics.Color;
@@ -112,7 +113,7 @@ public class ShowMap extends AppCompatActivity implements ActivityCompat.OnReque
                         JSONObject route = ja.getJSONObject(i);
                         JSONArray jsonArray = route.getJSONArray("stops");
 
-                        Log.e("stop len",jsonArray.length()+" ");
+                        Log.e("stop len", jsonArray.length() + " ");
 
                         for (int j = 0; j < jsonArray.length(); j++) {
                             JSONObject point = jsonArray.getJSONObject(i);
@@ -171,9 +172,10 @@ public class ShowMap extends AppCompatActivity implements ActivityCompat.OnReque
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            
+
         }
 
     }
 
 }
+*/

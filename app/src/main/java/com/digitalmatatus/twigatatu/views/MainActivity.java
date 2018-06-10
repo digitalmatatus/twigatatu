@@ -68,17 +68,29 @@ public class MainActivity extends AppCompatActivity {
         setTitle("Twiga Tatu");
         applyFontForToolbarTitle(this);
 
-        if (Utils.checkDefaults("data_collection", getBaseContext())) {
-            if (Utils.getDefaults("data_collection", getBaseContext()).equals("enabled") && getIntent().getStringExtra("continuation") == null) {
-//                finishAffinity();
-                Intent intent = new Intent(getBaseContext(), MainActivity2.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-            }
-        } else {
-            Utils.setDefaults("data_collection", "disabled", getBaseContext());
 
-        }
+        if (!Utils.checkDefaults("continuation_dc", getBaseContext())) {
+
+            if (Utils.checkDefaults("data_collection", getBaseContext())) {
+                if (Utils.getDefaults("data_collection", getBaseContext()).equals("enabled") && getIntent().getStringExtra("continuation") == null) {
+//                finishAffinity();
+                    Intent intent = new Intent(getBaseContext(), MainActivity2.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                }
+            } else {
+                Utils.setDefaults("data_collection", "disabled", getBaseContext());
+
+            }
+        } else{
+            String d_collection=getIntent().getStringExtra("data_collection");
+            if(d_collection!=null){
+            if (d_collection.equals("enabled")) {
+                Utils.setDefaults("data_collection", "enabled", getBaseContext());
+            } else {
+                Utils.setDefaults("data_collection", "disabled", getBaseContext());
+            }
+        }}
 
         Thread t = new Thread(new Runnable() {
             @Override

@@ -4,7 +4,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import Interface.ServerCallback;
+
 import com.digitalmatatus.twigatatu.R;
 
 import com.digitalmatatus.twigatatu.controllers.PostData;
@@ -56,11 +59,13 @@ public class ReviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_review);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setTitle("Twiga Tatu");
+        setTitle("Uploading your data");
         applyFontForToolbarTitle(this);//        applyFontForToolbarTitle(this);
 
         if (getFilesDir().listFiles().length == 0) {
             Toast.makeText(ReviewActivity.this, "No data to review.", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(ReviewActivity.this, MainActivity.class);
+            startActivity(intent);
             finish();
             return;
         }
@@ -106,13 +111,26 @@ public class ReviewActivity extends AppCompatActivity {
                         for (File f : getFilesDir().listFiles()) {
                             f.delete();
                         }
+                        String d_collection = "disabled";
+                        if (Utils.getDefaults("data_collection", getBaseContext()).equals("enabled")) {
+                            d_collection = "enabled";
+                        }
                         Utils.Delete(getBaseContext());
+
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                        prefs.edit().putBoolean("firstStart", false).apply();
+                        prefs.edit().putBoolean("continuation_dc", true).apply();
+
+
+                        Intent intent = new Intent(ReviewActivity.this, MainActivity.class);
+                        intent.putExtra("data_collection",d_collection);
+                        startActivity(intent);
 
 //				TODO Do something here if it was successful
                     }
                 });
-            } else{
-                Toast.makeText(getBaseContext(),"No data",Toast.LENGTH_LONG);
+            } else {
+                Toast.makeText(getBaseContext(), "No data", Toast.LENGTH_LONG);
                 TextView tv = findViewById(R.id.descriptionText);
                 tv.setText("No data to upload");
             }
@@ -177,7 +195,8 @@ public class ReviewActivity extends AppCompatActivity {
 
                 Intent mapIntent = new Intent(ReviewActivity.this, MapActivity.class);
                 startActivity(mapIntent);
-*/            }
+*/
+            }
 
 
         });

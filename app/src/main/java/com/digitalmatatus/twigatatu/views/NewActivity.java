@@ -47,10 +47,11 @@ public class NewActivity extends AppCompatActivity {
     private AutoCompleteTextView route, description, vehicle_type;
     EditText notes, capacity, surveyor;
     ArrayList<String> stopList = new ArrayList<>();
+    ArrayList<String> stopName = new ArrayList<>();
     ArrayList<String> descList = new ArrayList<>();
     ArrayList<String> stopIDs = new ArrayList<>();
     ArrayList<String> routeIDs = new ArrayList<>();
-    private String stopTo = null, stopFrom = null;
+    private String stopTo = null, stopFrom = null, vehicle_full = "No", new_route = "false", direction = "outbound";
     private boolean mIsBound;
     private static final int REQUEST_FINE_LOCATION = 0;
     private static final int MY_PERMISSIONS_REQUEST_READ_PHONE_STATE = 0;
@@ -126,6 +127,55 @@ public class NewActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
         dropdown.setAdapter(adapter2);
 
+        dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                vehicle_full = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        Spinner newRoute = findViewById(R.id.newRoute);
+        String[] new_route_items = new String[]{"No", "Yes"};
+        ArrayAdapter<String> adapter4 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, new_route_items);
+        newRoute.setAdapter(adapter4);
+
+        newRoute.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (parent.getItemAtPosition(position).toString().equals("Yes")) {
+                    new_route = "true";
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        Spinner tripDirection = findViewById(R.id.tripDirection);
+        String[] direction_items = new String[]{"outbound", "inbound"};
+        ArrayAdapter<String> adapter5 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, direction_items);
+        tripDirection.setAdapter(adapter5);
+
+        tripDirection.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                direction = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
 
         serviceIntent = new Intent(this, CaptureService.class);
         startService(serviceIntent);
@@ -135,7 +185,7 @@ public class NewActivity extends AppCompatActivity {
         final ProgressDialog pd = new ProgressDialog(NewActivity.this);
         pd.setMessage("loading routes");
         pd.show();
-        pd.setCancelable(true);
+        pd.setCancelable(false);
         GetData getData = new GetData(NewActivity.this);
         getData.online_stops("routes/", new ServerCallback() {
             @Override
@@ -146,7 +196,8 @@ public class NewActivity extends AppCompatActivity {
 
                     for (int i = 0; i < jsonArray.length(); i++) {
 
-                        stopList.add(jsonArray.getJSONObject(i).getString("short_name"));
+                        stopList.add(jsonArray.getJSONObject(i).getString("short_name") + " - " + jsonArray.getJSONObject(i).getString("desc"));
+                        stopName.add(jsonArray.getJSONObject(i).getString("short_name"));
                         stopIDs.add(jsonArray.getJSONObject(i).getString("id"));
                         routeIDs.add(jsonArray.getJSONObject(i).getString("route_id"));
                         descList.add(jsonArray.getJSONObject(i).getString("desc"));
@@ -220,7 +271,6 @@ public class NewActivity extends AppCompatActivity {
 
                     case R.id.ContinueButton:
 
-
                         if (Utils.checkPermission(getBaseContext())) {
 
                             if (validate()) {
@@ -230,12 +280,15 @@ public class NewActivity extends AppCompatActivity {
                                     updateCapture();
                                 }
 
-                                if (!route.getText().toString().isEmpty()) {
+                                if (!route.getText().toString().isEmpty() && stopList.contains(route.getText().toString()) && stopList.size() > 0) {
                                     Intent settingsIntent = new Intent(NewActivity.this, CaptureActivity.class);
                                     startActivity(settingsIntent);
-                                } else {
+                                } else if(new_route.equals("true")){
+                                    Intent settingsIntent = new Intent(NewActivity.this, CaptureActivity.class);
+                                    startActivity(settingsIntent);
+                                }else {
 //                                Toast.makeText(getBaseContext(), "Please fill Route Name Auto!", Toast.LENGTH_LONG);
-                                    Utils.showToast("Please fill Route Number!", getBaseContext());
+                                    Utils.showToast("Please choose a valid route number!", getBaseContext());
                                 }
                             } else {
                                 Utils.showToast("Please fill vehicle capacity!", getBaseContext());
@@ -267,10 +320,8 @@ public class NewActivity extends AppCompatActivity {
         synchronized (this) {
 
 //            EditText routeName = findViewById(R.id.routeName);
-            EditText routeDescription = findViewById(R.id.routeDescription);
             EditText fieldNotes = findViewById(R.id.fieldNotes);
             EditText vehicleCapacity = findViewById(R.id.vehicleCapacity);
-            EditText vehicleType = findViewById(R.id.vehicleType);
             EditText surveyor = findViewById(R.id.surveyor);
 
 
@@ -278,14 +329,22 @@ public class NewActivity extends AppCompatActivity {
             if (stopList.size() > 0)
                 i = stopList.indexOf(route.getText().toString());
 
-            if (stopList.contains(route.getText().toString()) && stopList.size() > 0) {
+            if (new_route.equals("false") && stopList.contains(route.getText().toString()) && stopList.size() > 0) {
                 Utils.setDefaults("route_id", stopIDs.get(i), getBaseContext());
-                Utils.setDefaults("route_name", route.getText().toString(), getBaseContext());
+                Utils.setDefaults("route_name", stopName.get(i), getBaseContext());
+
+            } else if (new_route.equals("false") && stopList.size() > 0) {
+                Utils.setDefaults("route_name", stopName.get(i), getBaseContext());
+                Utils.setDefaults("route_id", "", getBaseContext());
+                Utils.showToast("Please go back and choose a valid route number!", getBaseContext());
+
 
             } else {
+                Utils.setDefaults("route_name", route.getText().toString(), getBaseContext());
                 Utils.setDefaults("route_id", "", getBaseContext());
-                Utils.setDefaults("route_name", "", getBaseContext());
+
             }
+
 
 //            Utils.setDefaults("rn", routeName.getText().toString(), getBaseContext());
             Utils.setDefaults("route_description", description.getText().toString(), getBaseContext());
@@ -293,6 +352,10 @@ public class NewActivity extends AppCompatActivity {
             Utils.setDefaults("vehicle_capacity", vehicleCapacity.getText().toString(), getBaseContext());
             Utils.setDefaults("vehicle_type", vehicle_type.getText().toString(), getBaseContext());
             Utils.setDefaults("surveyor", surveyor.getText().toString(), getBaseContext());
+            Utils.setDefaults("vehicle_full", vehicle_full, getBaseContext());
+            Utils.setDefaults("new_route", new_route, getBaseContext());
+            Utils.setDefaults("direction", direction, getBaseContext());
+
 
             long start = new Date().getTime();
             Utils.setDefaults("start_time", start + "", getBaseContext());
@@ -329,11 +392,22 @@ public class NewActivity extends AppCompatActivity {
             captureService.currentCapture.vehicleType = vehicleType.getText().toString();
 
             int j = 0;
-            if (stopList.size() > 0) {
-                j = stopList.indexOf(route.getText().toString());
+
+
+            if (new_route.equals("false") && stopList.contains(route.getText().toString()) && stopList.size() > 0) {
                 Utils.setDefaults("route_id", stopIDs.get(j), getBaseContext());
-            } else {
+                Utils.setDefaults("route_name", stopName.get(j), getBaseContext());
+
+            } else if (new_route.equals("false") && stopList.size() > 0) {
+                Utils.setDefaults("route_name", stopName.get(j), getBaseContext());
                 Utils.setDefaults("route_id", "", getBaseContext());
+                Utils.showToast("Please go back and choose a valid route number!", getBaseContext());
+
+
+            } else {
+                Utils.setDefaults("route_name", route.getText().toString(), getBaseContext());
+                Utils.setDefaults("route_id", "", getBaseContext());
+
             }
 
             Utils.setDefaults("route_name", route.getText().toString(), getBaseContext());
@@ -342,6 +416,9 @@ public class NewActivity extends AppCompatActivity {
             Utils.setDefaults("vehicle_capacity", vehicleCapacity.getText().toString(), getBaseContext());
             Utils.setDefaults("vehicle_type", vehicle_type.getText().toString(), getBaseContext());
             Utils.setDefaults("surveyor", surveyor.getText().toString(), getBaseContext());
+            Utils.setDefaults("vehicle_full", vehicle_full, getBaseContext());
+            Utils.setDefaults("new_route", new_route, getBaseContext());
+            Utils.setDefaults("direction", direction, getBaseContext());
 
         }
 
