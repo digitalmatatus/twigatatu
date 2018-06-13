@@ -23,6 +23,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -735,7 +736,6 @@ public class CaptureActivity extends AppCompatActivity implements ICaptureActivi
     protected void setRouteName() {
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(CaptureActivity.this);
-
         alertDialogBuilder.setTitle("Stop Name");
         alertDialogBuilder.setMessage("Enter stop name below");
 
@@ -847,6 +847,43 @@ public class CaptureActivity extends AppCompatActivity implements ICaptureActivi
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (Utils.checkDefaults("route", getBaseContext()) || Utils.checkDefaults("stops", getBaseContext())) {
+            showDialog("Going back will delete all the data you have since you started recording data. Will you like to do that?", CaptureActivity.this, MainActivity2.class);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    public void showDialog(String msg, final Context ctx, final Class<?> cls) {
+        android.support.v7.app.AlertDialog.Builder builder1 = new android.support.v7.app.AlertDialog.Builder(new ContextThemeWrapper(ctx, R.style.myDialog));
+        builder1.setMessage(msg);
+        builder1.setCancelable(true);
+
+        builder1.setPositiveButton(
+                "Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        captureService.stopCapture();
+                        MainActivity2.deleteData(ctx, cls);
+//                        dialog.cancel();
+                    }
+                });
+
+        builder1.setNegativeButton(
+                "No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        android.support.v7.app.AlertDialog alert11 = builder1.create();
+        alert11.show();
+
     }
 
 

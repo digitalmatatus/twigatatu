@@ -1,5 +1,6 @@
 package com.digitalmatatus.twigatatu.model;
 
+import android.content.Context;
 import android.util.Base64;
 import android.util.Log;
 
@@ -22,6 +23,7 @@ import java.util.Map;
 
 import Interface.VolleyCallback;
 import com.digitalmatatus.twigatatu.utils.AppController;
+import com.digitalmatatus.twigatatu.utils.Utils;
 
 /**
  * Created by stephineosoro on 20/06/16.
@@ -29,6 +31,12 @@ import com.digitalmatatus.twigatatu.utils.AppController;
 public class Post {
 
 //    public static String baseURL = "http://169.254.85.197";
+
+     private static Context context;
+
+    public Post(Context context) {
+        this.context = context;
+    }
 
 
     public static void PostString(String url, final Map<String, String> parameters, final VolleyCallback callback) {
@@ -125,6 +133,8 @@ public class Post {
                     Log.e("e2", e2.toString());
                 }*/
             }
+
+            Utils.showToast("Could not upload your data due to malfunctioned data you collected",context);
 
         }
     }
