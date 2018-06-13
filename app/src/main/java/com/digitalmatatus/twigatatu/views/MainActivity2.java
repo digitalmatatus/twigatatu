@@ -2,6 +2,7 @@ package com.digitalmatatus.twigatatu.views;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
@@ -15,12 +16,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.digitalmatatus.twigatatu.R;
 import com.digitalmatatus.twigatatu.utils.Util;
+import com.digitalmatatus.twigatatu.utils.Utils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -80,7 +83,7 @@ public class MainActivity2 extends AppCompatActivity implements GoogleApiClient.
         prefsManager.registerOnSharedPreferenceChangeListener(prefListener);
 
 
-        TextView userNameText =  findViewById(R.id.UserNameText);
+        TextView userNameText = findViewById(R.id.UserNameText);
         userNameText.setTypeface(mTfLight);
         userNameText.setText("gtfs");
 
@@ -93,7 +96,13 @@ public class MainActivity2 extends AppCompatActivity implements GoogleApiClient.
 
         TextView total = findViewById(R.id.uploadText);
         total.setTypeface(mTfLight);
+
+        TextView delete = findViewById(R.id.TextView02);
+        delete.setTypeface(mTfLight);
+
         showPermissionDialog();
+
+
         showGpsDialogAndGetLocation();
 
         View.OnClickListener listener = new View.OnClickListener() {
@@ -114,12 +123,14 @@ public class MainActivity2 extends AppCompatActivity implements GoogleApiClient.
                         startActivity(mailIntent);
                         break;
 
-                   /* case R.id.mapButton:
+                    case R.id.mapButton:
 
-                        Intent uploadIntent = new Intent(MainActivity2.this, ShowMap.class);
-                        startActivity(uploadIntent);
+                       /* Intent uploadIntent = new Intent(MainActivity2.this, ShowMap.class);
+                        startActivity(uploadIntent);*/
+                        Log.e("clicked", "delete");
 
-                        break;*/
+                        deleteData(getBaseContext(), MainActivity2.class);
+                        break;
 
                     default:
                         break;
@@ -133,8 +144,8 @@ public class MainActivity2 extends AppCompatActivity implements GoogleApiClient.
         ImageButton reviewButton = (ImageButton) findViewById(R.id.uploadButton);
         reviewButton.setOnClickListener(listener);
 
-        /*ImageButton uploadButton = (ImageButton) findViewById(R.id.UploadButton);
-        uploadButton.setOnClickListener(listener);*/
+        ImageButton deleteButton = (ImageButton) findViewById(R.id.mapButton);
+        deleteButton.setOnClickListener(listener);
 
     }
 
@@ -286,4 +297,74 @@ public class MainActivity2 extends AppCompatActivity implements GoogleApiClient.
 
     }
 
+    public static void deleteData(Context context, Class<?> cls) {
+
+
+
+        if (Utils.checkDefaults("data", context)) {
+            Log.e("jsonArray data", Utils.getDefaults("data", context));
+            Utils.setDefaults("data", "", context);
+
+
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.remove("data");
+            editor.commit();
+
+            if (!Utils.checkDefaults("data", context)) {
+                Utils.showToast("Data deleted", context);
+            }
+
+
+        }
+
+        if (Utils.checkDefaults("stops", context)) {
+            Log.e("jsonArray stops", Utils.getDefaults("stops", context));
+            Utils.setDefaults("stops", "", context);
+
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.remove("stops");
+            editor.commit();
+
+            if (!Utils.checkDefaults("stops", context)) {
+                Utils.showToast("Stops deleted", context);
+            }
+
+
+        }
+
+        if (Utils.checkDefaults("route", context)) {
+            Log.e("jsonArray routes", Utils.getDefaults("route", context));
+            Utils.setDefaults("route", "", context);
+
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.remove("route");
+            editor.commit();
+
+            if (!Utils.checkDefaults("route", context)) {
+                Utils.showToast("route deleted", context);
+            }
+
+        }
+
+        if (Utils.checkDefaults("routes", context)) {
+            Log.e("jsonArray routes", Utils.getDefaults("routes", context));
+            Utils.setDefaults("route", "", context);
+
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.remove("routes");
+            editor.commit();
+
+            if (!Utils.checkDefaults("routes", context)) {
+                Utils.showToast("routes deleted", context);
+            }
+
+        }
+
+        Intent intent = new Intent(context, cls);
+        context.startActivity(intent);
+    }
 }

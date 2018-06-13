@@ -25,7 +25,8 @@ public class PostData {
     public void post(final String t_url, final Map<String, String> parameters, final JSONObject params, final ServerCallback callback) {
 
         if (parameters != null) {
-            Post.PostString(Utils.baseURL() + t_url, parameters, new VolleyCallback() {
+            Post post = new Post(context);
+            post.PostString(Utils.baseURL() + t_url, parameters, new VolleyCallback() {
                 @Override
                 public void onSuccessResponse(String result) {
                     callback.onSuccess(result);
@@ -36,7 +37,9 @@ public class PostData {
                 }
             });
         } else {
-            Post.PostJSON(Utils.baseURL() +t_url, params, new VolleyCallback() {
+
+            Post post = new Post(context);
+            post.PostJSON(Utils.baseURL() +t_url, params, new VolleyCallback() {
                 @Override
                 public void onSuccessResponse(String result) {
                 }
