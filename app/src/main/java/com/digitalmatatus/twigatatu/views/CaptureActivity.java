@@ -136,6 +136,10 @@ public class CaptureActivity extends AppCompatActivity implements ICaptureActivi
         TextView upload = findViewById(R.id.uploadText);
         upload.setTypeface(mTfLight);
 
+        TextView capacity = findViewById(R.id.totalPasssengerCount);
+        capacity.setTypeface(mTfLight);
+        capacity.setText(getIntent().getStringExtra("capacity"));
+
 
         // Start the service in case it isn't already running
 
@@ -282,6 +286,7 @@ public class CaptureActivity extends AppCompatActivity implements ICaptureActivi
 
         if (captureService != null) {
             try {
+                captureService.currentCapture.totalPassengerCount = Integer.parseInt(getIntent().getStringExtra("capacity"));
                 captureService.startCapture();
             } catch (NoCurrentCaptureException e) {
                 Intent settingsIntent = new Intent(CaptureActivity.this, NewActivity.class);
@@ -676,9 +681,18 @@ public class CaptureActivity extends AppCompatActivity implements ICaptureActivi
             jsonObject.put("surveyor_name", Utils.getDefaults("surveyor", getBaseContext()));
             jsonObject.put("vehicle_full", Utils.getDefaults("vehicle_full", getBaseContext()));
             jsonObject.put("new_route", Utils.getDefaults("new_route", getBaseContext()));
-            jsonObject.put("direction", Utils.getDefaults("direction", getBaseContext()));
+            jsonObject.put("inbound", Utils.getDefaults("inbound", getBaseContext()));
 //            jsonObject.put("trip_duration", Utils.getDefaults("trip_duration", getBaseContext()));
             jsonObject.put("trip_duration", mins);
+
+            if (Utils.getDefaults("new_route", getBaseContext()).equals("true")){
+                JSONObject new_trip = new JSONObject();
+                new_trip.put("headsign", Utils.getDefaults("headsign", getBaseContext()));
+                new_trip.put("origin", Utils.getDefaults("origin", getBaseContext()));
+                new_trip.put("route_variation", Utils.getDefaults("route_variation", getBaseContext()));
+
+                jsonObject.put("new_trip_details",new_trip);
+            }
 
 
             JSONArray jsonArray = null;

@@ -82,15 +82,16 @@ public class MainActivity extends AppCompatActivity {
                 Utils.setDefaults("data_collection", "disabled", getBaseContext());
 
             }
-        } else{
-            String d_collection=getIntent().getStringExtra("data_collection");
-            if(d_collection!=null){
-            if (d_collection.equals("enabled")) {
-                Utils.setDefaults("data_collection", "enabled", getBaseContext());
-            } else {
-                Utils.setDefaults("data_collection", "disabled", getBaseContext());
+        } else {
+            String d_collection = getIntent().getStringExtra("data_collection");
+            if (d_collection != null) {
+                if (d_collection.equals("enabled")) {
+                    Utils.setDefaults("data_collection", "enabled", getBaseContext());
+                } else {
+                    Utils.setDefaults("data_collection", "disabled", getBaseContext());
+                }
             }
-        }}
+        }
 
         Thread t = new Thread(new Runnable() {
             @Override
@@ -192,14 +193,25 @@ public class MainActivity extends AppCompatActivity {
                     fare.put("stop_from", stop_from.getText().toString());
                     fare.put("amount", amnt + "");
 
-//                    int i = stopList.indexOf(stop_from.getText().toString());
-//                    fare.put("stops_from_id", stopIDs.get(i));
-                    fare.put("stop_from_id", "");
+                    if (stopList.size() > 0 && stopList.contains(stop_from.getText().toString()) && stopList.contains(stop_to.getText().toString())) {
+                        int i = stopList.indexOf(stop_from.getText().toString());
+                        fare.put("stop_from_id", stopIDs.get(i));
+                        int j = stopList.indexOf(stop_to.getText().toString());
+                        fare.put("stop_to_id", stopIDs.get(j));
+
+                    } else {
+                        fare.put("stop_from_id", "");
+                        fare.put("stop_to_id", "");
+                    }
+
+
 //                    fare.put("route_id", routeIDs.get(i));
-                    fare.put("route_id", "");
-//                    int j = stopList.indexOf(stop_to.getText().toString());
-//                    fare.put("stops_to_id", stopIDs.get(j));
-                    fare.put("stop_to_id", "");
+                    if (Utils.checkDefaults("route_id", getBaseContext())) {
+                        fare.put("route_id", Utils.getDefaults("route_id", getBaseContext()));
+                    } else {
+                        fare.put("route_id", "");
+                    }
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();

@@ -201,6 +201,12 @@
                 android:layout_height="wrap_content"
                 android:text="Vehicle Capacity:" />
 
+            <TextView
+                android:id="@+id/capacityHint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="capacity mostly can be: 14,26,33,37,40,46,51,54 or 75 seats" />
+
             <EditText
                 android:id="@+id/vehicleCapacity"
                 android:layout_width="match_parent"

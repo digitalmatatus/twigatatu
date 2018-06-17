@@ -163,6 +163,7 @@ public class RideConditions extends AppCompatActivity {
                 if (Utils.checkDefaults("data_collection", getBaseContext())) {
                     if (Utils.getDefaults("data_collection", getBaseContext()).equals("enabled")) {
 //                finishAffinity();
+                        Utils.showToast("You have successfully finished collecting your route!",getBaseContext());
                         Intent intent = new Intent(getBaseContext(), MainActivity2.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);

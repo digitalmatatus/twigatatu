@@ -320,7 +320,7 @@ public class CaptureService extends Service implements GoogleApiClient.Connectio
                 currentJStop.put("latitude", lastLocation.getLatitude());
                 currentJStop.put("longitude", lastLocation.getLongitude());
                 currentJStop.put("stop_name", stop_name);
-                currentJStop.put("stop_designation",designation);
+                currentJStop.put("designation",designation);
 
             } catch (JSONException e) {
                 e.printStackTrace();
