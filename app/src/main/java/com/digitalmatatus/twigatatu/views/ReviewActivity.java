@@ -112,18 +112,25 @@ public class ReviewActivity extends AppCompatActivity {
                             f.delete();
                         }
                         String d_collection = "disabled";
+                        String route_id = "";
                         if (Utils.getDefaults("data_collection", getBaseContext()).equals("enabled")) {
                             d_collection = "enabled";
+                        }
+
+                        if (Utils.checkDefaults("route_id", getBaseContext())) {
+                            route_id= Utils.getDefaults("route_id", getBaseContext());
                         }
                         Utils.Delete(getBaseContext());
 
                         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                         prefs.edit().putBoolean("firstStart", false).apply();
                         prefs.edit().putBoolean("continuation_dc", true).apply();
+                        prefs.edit().putString("route_id", route_id).apply();
+
 
 
                         Intent intent = new Intent(ReviewActivity.this, MainActivity.class);
-                        intent.putExtra("data_collection",d_collection);
+                        intent.putExtra("data_collection", d_collection);
                         startActivity(intent);
 
 //				TODO Do something here if it was successful
@@ -143,7 +150,6 @@ public class ReviewActivity extends AppCompatActivity {
     private void updateList() {
 
         ArrayList<RouteCapture> routes = new ArrayList<RouteCapture>();
-        JSONArray ja = new JSONArray();
 
         for (File f : getFilesDir().listFiles()) {
 
@@ -158,11 +164,9 @@ public class ReviewActivity extends AppCompatActivity {
 
                 TransitWandProtos.Upload.Route pbRouteData = TransitWandProtos.Upload.Route.parseDelimitedFrom(dataInputStream);
 
-//                RouteCapture rc = RouteCapture.deseralize(pbRouteData,getBaseContext());
-                JSONObject jo = RouteCapture.jsonify(pbRouteData, getBaseContext());
-                ja.put(jo);
+                RouteCapture rc = RouteCapture.deseralize(pbRouteData, getBaseContext());
 
-//                routes.add(rc);
+                routes.add(rc);
 
             } catch (FileNotFoundException e) {
                 // TODO Auto-generated catch block
@@ -182,7 +186,6 @@ public class ReviewActivity extends AppCompatActivity {
             }
         }
 
-
         ListView captureListView = (ListView) findViewById(R.id.captureList);
         captureListView.setAdapter(new CaptureListAdapter(this, routes));
 
@@ -194,12 +197,12 @@ public class ReviewActivity extends AppCompatActivity {
                /* MapActivity.itemPosition = position;
 
                 Intent mapIntent = new Intent(ReviewActivity.this, MapActivity.class);
-                startActivity(mapIntent);
-*/
+                startActivity(mapIntent);*/
             }
 
 
         });
 
     }
+
 }

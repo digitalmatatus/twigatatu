@@ -1,6 +1,7 @@
 package com.digitalmatatus.twigatatu.model;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Base64;
 import android.util.Log;
 
@@ -24,6 +25,8 @@ import java.util.Map;
 import Interface.VolleyCallback;
 import com.digitalmatatus.twigatatu.utils.AppController;
 import com.digitalmatatus.twigatatu.utils.Utils;
+import com.digitalmatatus.twigatatu.views.ErrorActivity;
+import com.digitalmatatus.twigatatu.views.MainActivity2;
 
 /**
  * Created by stephineosoro on 20/06/16.
@@ -135,6 +138,9 @@ public class Post {
             }
 
             Utils.showToast("Could not upload your data due to malfunctioned data you collected",context);
+
+            Intent intent = new Intent(context, ErrorActivity.class);
+            context.startActivity(intent);
 
         }
     }

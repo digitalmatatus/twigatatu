@@ -489,5 +489,8 @@
     <color name="Navy">#000080</color>
     <color name="Black">#000000</color>
     <color name="dark_blue">#0000A0</color>
+    <color name="apptheme_primary">#3F51B5</color>
+    <color name="apptheme_primary_dark">#303F9F</color>
+    <color name="apptheme_accent">#FF4081</color>
     <!-- Mixed Colors -->
 </resources>

@@ -5,4 +5,9 @@
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_my_intro">Intro</string>
     <string name="title_activity_map">MapActivity</string>
+    <string name="error_title_damn">An error occurred while uploading your data. Click report to let us know of this error and please contact your data collection manager.</string>
+    <string name="error_subtitle_failed_one_more_time">Failed one more time</string>
+    <string name="info_retrying">Reported</string>
+    <string name="report">Report</string>
+
 </resources>

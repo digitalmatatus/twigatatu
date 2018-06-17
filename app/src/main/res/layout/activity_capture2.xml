@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.digitalmatatus.twigatatu.views.NewActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <LinearLayout xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:orientation="horizontal"
+        tools:context="com.digitalmatatus.twigatatu.views.CaptureActivity">
+        <!--android:background="#444"-->
+
+        <RelativeLayout
+            android:id="@+id/captures"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/StartCaptureButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:background="@null"
+                android:src="@drawable/start_button" />
+
+            <TextView
+                android:id="@+id/descriptionText2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/StartCaptureButton"
+                android:layout_alignLeft="@+id/StartCaptureButton"
+                android:text="Start" />
+            <!--android:textColor="#aaa"-->
+
+            <ImageButton
+                android:id="@+id/transitStopButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:background="@null"
+                android:src="@drawable/transit_stop_button" />
+
+            <TextView
+                android:id="@+id/descriptionText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/StopCaptureButton"
+                android:layout_alignLeft="@+id/StopCaptureButton"
+                android:text="Finish" />
+
+            <ImageButton
+                android:id="@+id/StopCaptureButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:background="@null"
+                android:src="@drawable/stop_button" />
+
+
+            <TextView
+                android:id="@+id/notesText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="127dp"
+                android:layout_marginTop="149dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:text="Duration:" />
+
+
+            <Chronometer
+                android:id="@+id/captureChronometer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/notesText"
+                android:layout_alignTop="@+id/notesText" />
+
+
+            <TextView
+                android:id="@+id/uploadText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/notesText"
+                android:layout_alignRight="@+id/notesText"
+                android:text="Distance:" />
+
+            <TextView
+                android:id="@+id/distanceText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/uploadText"
+                android:layout_alignBottom="@+id/uploadText"
+                android:text="distanceText" />
+
+            <TextView
+                android:id="@+id/TextView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/uploadText"
+                android:layout_alignStart="@+id/notesText"
+                android:text="Stops:" />
+
+            <TextView
+                android:id="@+id/stopsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/TextView5"
+                android:layout_alignBaseline="@+id/TextView5"
+                android:layout_alignBottom="@+id/TextView5"
+                android:text="StopsText" />
+
+
+            <ImageView
+                android:id="@+id/passengerImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/PassengerAlightButton"
+                android:layout_alignEnd="@+id/notesText"
+                android:paddingBottom="8dp"
+                android:src="@drawable/passengers" />
+
+            <ImageButton
+                android:id="@+id/PassengerAlightButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/PassengerBoardButton"
+                android:layout_alignEnd="@+id/distanceText"
+                android:background="@null"
+                android:src="@drawable/alight_button" />
+
+            <ImageButton
+                android:id="@+id/PassengerBoardButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="65dp"
+                android:layout_marginBottom="184dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"
+                android:background="@null"
+                android:src="@drawable/board_button" />
+
+
+            <TextView
+                android:id="@+id/routeNameText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="68dp"
+                android:layout_alignEnd="@+id/stopsText"
+                android:layout_alignParentBottom="true"
+                android:text="Route Name"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+
+            <TextView
+                android:id="@+id/boardingPassengerCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/descriptionText2"
+                android:layout_alignTop="@+id/passengerImageView"
+                android:text="0"
+                android:textSize="35sp" />
+
+            <TextView
+                android:id="@+id/alightingPassengerCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/PassengerAlightButton"
+                android:layout_alignBottom="@+id/PassengerAlightButton"
+                android:text="0"
+                android:textSize="35sp" />
+
+            <TextView
+                android:id="@+id/text1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/PassengerBoardButton"
+                android:layout_centerHorizontal="true"
+                android:text="Passengers" />
+
+            <TextView
+                android:id="@+id/gpsStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="91dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:text="GPS Pending" />
+
+            <TextView
+                android:id="@+id/totalPasssengerCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/TextView5"
+                android:layout_alignBottom="@+id/PassengerAlightButton"
+                android:text="0"
+                android:textSize="45sp" />
+
+
+        </RelativeLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+    </LinearLayout>
+</LinearLayout>

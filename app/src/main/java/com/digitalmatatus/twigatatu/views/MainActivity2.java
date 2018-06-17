@@ -36,6 +36,8 @@ import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 
+import java.io.File;
+
 import static com.digitalmatatus.twigatatu.utils.Utils.applyFontForToolbarTitle;
 
 public class MainActivity2 extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -100,6 +102,9 @@ public class MainActivity2 extends AppCompatActivity implements GoogleApiClient.
         TextView delete = findViewById(R.id.TextView02);
         delete.setTypeface(mTfLight);
 
+        TextView saved = findViewById(R.id.ReviewText);
+        saved.setTypeface(mTfLight);
+
         showPermissionDialog();
 
 
@@ -128,8 +133,15 @@ public class MainActivity2 extends AppCompatActivity implements GoogleApiClient.
                        /* Intent uploadIntent = new Intent(MainActivity2.this, ShowMap.class);
                         startActivity(uploadIntent);*/
                         Log.e("clicked", "delete");
-
+                        for(File f : getFilesDir().listFiles()) {
+                            f.delete();
+                        }
                         deleteData(getBaseContext(), MainActivity2.class);
+                        break;
+                    case R.id.ReviewButton:
+
+                        Intent reviewIntent = new Intent(MainActivity2.this, ViewData.class);
+                        startActivity(reviewIntent);
                         break;
 
                     default:
@@ -146,6 +158,9 @@ public class MainActivity2 extends AppCompatActivity implements GoogleApiClient.
 
         ImageButton deleteButton = (ImageButton) findViewById(R.id.mapButton);
         deleteButton.setOnClickListener(listener);
+
+        ImageButton viewButton = (ImageButton) findViewById(R.id.ReviewButton);
+        viewButton.setOnClickListener(listener);
 
     }
 
