@@ -112,7 +112,7 @@
 
     <TextView
         android:id="@+id/ReviewText"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_below="@+id/ReviewButton"
@@ -120,6 +120,23 @@
         android:text="My collected routes"
         android:layout_marginLeft="32dp"
         android:layout_alignParentLeft="true" />
+
+    <ImageButton
+        android:id="@+id/viewButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/ReviewButton"
+        android:layout_centerHorizontal="true"
+        android:background="@null"
+        android:src="@drawable/map" />
+
+    <TextView
+        android:id="@+id/viewText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ReviewButton"
+        android:layout_centerHorizontal="true"
+        android:text="Visualize" />
 
 </RelativeLayout>
 

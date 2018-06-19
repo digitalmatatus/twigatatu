@@ -1,1 +1,4 @@
 include ':app'
+include ':osmdroid-android'
+project(':osmdroid-android').projectDir = new File(' /Users/mathewjuma/Samsung/osmdroid-android')
+

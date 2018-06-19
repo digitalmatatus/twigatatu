@@ -105,6 +105,9 @@ public class MainActivity2 extends AppCompatActivity implements GoogleApiClient.
         TextView saved = findViewById(R.id.ReviewText);
         saved.setTypeface(mTfLight);
 
+        TextView visualize = findViewById(R.id.viewText);
+        visualize.setTypeface(mTfLight);
+
         showPermissionDialog();
 
 
@@ -133,7 +136,7 @@ public class MainActivity2 extends AppCompatActivity implements GoogleApiClient.
                        /* Intent uploadIntent = new Intent(MainActivity2.this, ShowMap.class);
                         startActivity(uploadIntent);*/
                         Log.e("clicked", "delete");
-                        for(File f : getFilesDir().listFiles()) {
+                        for (File f : getFilesDir().listFiles()) {
                             f.delete();
                         }
                         deleteData(getBaseContext(), MainActivity2.class);
@@ -144,23 +147,32 @@ public class MainActivity2 extends AppCompatActivity implements GoogleApiClient.
                         startActivity(reviewIntent);
                         break;
 
+                    case R.id.viewButton:
+
+                        Intent viewIntent = new Intent(MainActivity2.this, MapActivity.class);
+                        startActivity(viewIntent);
+                        break;
+
                     default:
                         break;
                 }
             }
         };
 
-        ImageButton wandButton = (ImageButton) findViewById(R.id.WandButton);
+        ImageButton wandButton = findViewById(R.id.WandButton);
         wandButton.setOnClickListener(listener);
 
-        ImageButton reviewButton = (ImageButton) findViewById(R.id.uploadButton);
+        ImageButton reviewButton = findViewById(R.id.uploadButton);
         reviewButton.setOnClickListener(listener);
 
-        ImageButton deleteButton = (ImageButton) findViewById(R.id.mapButton);
+        ImageButton deleteButton = findViewById(R.id.mapButton);
         deleteButton.setOnClickListener(listener);
 
-        ImageButton viewButton = (ImageButton) findViewById(R.id.ReviewButton);
+        ImageButton viewButton = findViewById(R.id.ReviewButton);
         viewButton.setOnClickListener(listener);
+
+        ImageButton mapButton = findViewById(R.id.viewButton);
+        mapButton.setOnClickListener(listener);
 
     }
 
@@ -313,7 +325,6 @@ public class MainActivity2 extends AppCompatActivity implements GoogleApiClient.
     }
 
     public static void deleteData(Context context, Class<?> cls) {
-
 
 
         if (Utils.checkDefaults("data", context)) {
