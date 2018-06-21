@@ -2,26 +2,40 @@ package com.digitalmatatus.twigatatu.views;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.digitalmatatus.twigatatu.R;
+import com.digitalmatatus.twigatatu.controllers.GetData;
 import com.digitalmatatus.twigatatu.utils.Util;
 import com.digitalmatatus.twigatatu.utils.Utils;
 import com.google.android.gms.common.ConnectionResult;
@@ -36,9 +50,19 @@ import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
+import java.util.ArrayList;
+
+import Interface.ServerCallback;
 
 import static com.digitalmatatus.twigatatu.utils.Utils.applyFontForToolbarTitle;
+import static com.digitalmatatus.twigatatu.utils.Utils.sentEmail;
+import static com.digitalmatatus.twigatatu.utils.Utils.set;
+import static com.digitalmatatus.twigatatu.utils.Utils.setClipboard;
 
 public class MainActivity2 extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
@@ -52,6 +76,14 @@ public class MainActivity2 extends AppCompatActivity implements GoogleApiClient.
     protected Typeface mTfLight;
 
     private SharedPreferences prefsManager = null;
+
+    ArrayList<String> stopList = new ArrayList<>();
+    ArrayList<String> stopName = new ArrayList<>();
+    ArrayList<String> descList = new ArrayList<>();
+    ArrayList<String> stopIDs = new ArrayList<>();
+    ArrayList<String> routeIDs = new ArrayList<>();
+
+    private String stopTo = null, stopFrom = null, selectedItem = null;
 
     SharedPreferences.OnSharedPreferenceChangeListener prefListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
@@ -393,4 +425,171 @@ public class MainActivity2 extends AppCompatActivity implements GoogleApiClient.
         Intent intent = new Intent(context, cls);
         context.startActivity(intent);
     }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.send) {
+            if (Utils.checkDefaults("data", getBaseContext())) {
+                sentEmail(getBaseContext(), new String[]{"rstephenosoro@gmail.com"}
+                        , "Bad Data", Utils.getDefaults("data", getBaseContext()));
+            } else {
+                Utils.showToast("No data to send!", getBaseContext());
+            }
+            return true;
+        }
+
+        if (id == R.id.copy) {
+            if (Utils.checkDefaults("data", getBaseContext())) {
+                setClipboard(getBaseContext(), Utils.getDefaults("data", getBaseContext()));
+                Utils.showToast("Data successfully copied to clipboard!", getBaseContext());
+
+            } else {
+                Utils.showToast("No data to copy!", getBaseContext());
+            }
+            return true;
+        }
+
+        if (id == R.id.twigatatu) {
+
+            loadRoutes();
+            showDialog("Type and choose the route you want to submit data for",MainActivity2.this, MainActivity.class);
+
+
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void showDialog(String msg, final Context ctx, final Class<?> cls) {
+        android.support.v7.app.AlertDialog.Builder builder1 = new android.support.v7.app.AlertDialog.Builder(new ContextThemeWrapper(ctx, R.style.myDialog));
+
+        builder1.setMessage(msg);
+        builder1.setCancelable(true);
+
+        LinearLayout layout = new LinearLayout(ctx);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        final AutoCompleteTextView autoCompleteTextView = new AutoCompleteTextView(ctx);
+        autoCompleteTextView.setTypeface(mTfLight);
+
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(),
+                android.R.layout.simple_dropdown_item_1line, stopList);
+        autoCompleteTextView.setAdapter(adapter);
+        layout.addView(autoCompleteTextView);
+
+        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (in != null) {
+                    in.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+                }
+                autoCompleteTextView.setText(adapter.getItem(position));
+                selectedItem = parent.getItemAtPosition(position).toString();
+
+
+                Log.e("stop_from is", adapter.getItem(position));
+            }
+        });
+
+        builder1.setView(layout);
+
+
+        builder1.setPositiveButton(
+                "Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        int i = 0;
+                        if (stopList.size() > 0)
+                            i = stopList.indexOf(selectedItem);
+
+                        if (stopList.contains(selectedItem) && stopList.size() > 0) {
+                            Utils.setDefaults("route_id", stopIDs.get(i), getBaseContext());
+
+                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+                            prefs.edit().putBoolean("firstStart", false).apply();
+                            prefs.edit().putBoolean("continuation_dc", true).apply();
+                            prefs.edit().putString("route_id", stopIDs.get(i)).apply();
+
+                            Intent intent = new Intent(ctx, cls);
+                            ctx.startActivity(intent);
+
+                        } else {
+                            Utils.showToast(" Please choose one of the given routes to proceed! ", getBaseContext());
+                            dialog.cancel();
+
+                        }
+
+
+                    }
+                });
+
+        builder1.setNegativeButton(
+                "No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        android.support.v7.app.AlertDialog alert11 = builder1.create();
+        alert11.show();
+
+    }
+
+    public void loadRoutes() {
+        final ProgressDialog pd = new ProgressDialog(MainActivity2.this);
+        pd.setMessage("loading routes");
+        pd.show();
+        pd.setCancelable(false);
+        GetData getData = new GetData(MainActivity2.this);
+        getData.online_stops("routes/", new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+                try {
+                    JSONArray jsonArray = new JSONArray(result);
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+
+                        stopList.add(jsonArray.getJSONObject(i).getString("short_name") + " - " + jsonArray.getJSONObject(i).getString("desc"));
+                        stopName.add(jsonArray.getJSONObject(i).getString("short_name"));
+                        stopIDs.add(jsonArray.getJSONObject(i).getString("id"));
+                        routeIDs.add(jsonArray.getJSONObject(i).getString("route_id"));
+                        descList.add(jsonArray.getJSONObject(i).getString("desc"));
+
+                    }
+
+
+
+                    pd.dismiss();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onSuccess(JSONObject response) {
+
+            }
+        });
+    }
+
 }
