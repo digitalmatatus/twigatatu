@@ -15,6 +15,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.digitalmatatus.twigatatu.model.Fares;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.RadarChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -983,6 +984,272 @@ public class RadarChartActivity extends Base {
 //            }
 //        });
 //    }
+
+    private void getBudget(String id) {
+        String tag_string_req = "req_login";
+        StringRequest strReq = new StringRequest(Request.Method.GET,
+                Utils.baseURL() + "twiga/budgeting/expenditure/user_id/" + id, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.e("All Data", "response from the server is: " + response.toString());
+                try {
+                    ArrayList<Double> doublers = new ArrayList<>();
+
+                    ArrayList<RadarEntry> entries1 = new ArrayList<RadarEntry>();
+                    ArrayList<RadarEntry> entries2 = new ArrayList<RadarEntry>();
+
+                    int six = 0, nine = 0, twelve = 0, fifteen = 0, eighteen = 0;
+                    float sixA = 0, nineA = 0, twelveA = 0, fifteenA = 0, eighteenA = 0;
+                    float fin6 = 0, fin9 = 0, fin12 = 0, fin15 = 0, fin18 = 0;
+
+                    int sixb = 0, nineb = 0, twelveb = 0, fifteenb = 0, eighteenb = 0;
+                    float sixB = 0, nineB = 0, twelveB = 0, fifteenB = 0, eighteenB = 0;
+                    float fin6B = 0, fin9B = 0, fin12B = 0, fin15B = 0, fin18B = 0;
+
+
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray jsonArray = jsonObject.getJSONArray("expenditure");
+                    Log.e("Expenditure Array", jsonArray.toString());
+
+//                    TODO .. calculate if we have data for last week the assign the boolean last week
+                    boolean noData = false;
+
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+
+                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                        Date travel_time = new SimpleDateFormat("hh:mm aa").parse(jsonObject1.getString("time"));
+                        String week = jsonObject1.getString("week");
+
+                        DateFormat df = new SimpleDateFormat("hh:mm aa");
+                        //Desired format: 24 hour format: Change the pattern as per the need
+                        DateFormat outputformat = new SimpleDateFormat("HH:mm");
+                        //Converting the input String to Date
+                        Date date = df.parse(jsonObject1.getString("time"));
+                        Log.e("date", date + "");
+                        //Changing the format of date and storing it in String
+                        String output = outputformat.format(date);
+
+//                        Rounding off the time to the nearest hour interval
+                        Log.e("time", travel_time + " output is" + output);
+
+                        int hour = toNearestHourInterval(output);
+
+                        Log.e("hour", hour + " and week is " + week);
+
+
+//                        doublers.add(Double.parseDouble(jsonObject1.getString("stop_name")));
+//                            xVal[i] = hour + "";
+
+//                        Getting average of each time
+                        if (week.equals("1")) {
+
+                            if (hour == 6) {
+                                six += 1;
+                                sixA += Float.parseFloat(jsonObject1.getString("amount"));
+                                fin6 = sixA / six;
+
+                            } else if (hour == 9) {
+                                nine += 1;
+                                nineA += Float.parseFloat(jsonObject1.getString("amount"));
+                                fin9 = nineA / nine;
+                            } else if (hour == 12) {
+                                twelve += 1;
+                                twelveA += Float.parseFloat(jsonObject1.getString("amount"));
+                                fin12 = twelveA / twelve;
+
+                            } else if (hour == 15) {
+                                fifteen += 1;
+                                fifteenA += Float.parseFloat(jsonObject1.getString("amount"));
+                                fin15 = fifteenA / fifteen;
+                            } else {
+                                eighteen += 1;
+                                eighteenA += Float.parseFloat(jsonObject1.getString("amount"));
+                                fin18 = eighteenA / eighteen;
+                            }
+
+                        } else if (week.equals("2")) {
+                            if (hour == 6) {
+                                sixb += 1;
+                                sixB += Float.parseFloat(jsonObject1.getString("amount"));
+                                fin6B = sixB / sixb;
+                            } else if (hour == 9) {
+                                nineb += 1;
+                                nineB += Float.parseFloat(jsonObject1.getString("amount"));
+                                fin9B = nineB / nineb;
+                            } else if (hour == 12) {
+                                twelveb += 1;
+                                twelveB += Float.parseFloat(jsonObject1.getString("amount"));
+                                fin12B = twelveB / twelveb;
+                                Log.e("twelve", fin12B + " " + twelveB);
+
+                            } else if (hour == 15) {
+                                fifteenb += 1;
+                                fifteenB += Float.parseFloat(jsonObject1.getString("amount"));
+                                fin15B = fifteenB / fifteenb;
+                            } else {
+                                eighteenb += 1;
+                                eighteenB += Float.parseFloat(jsonObject1.getString("amount"));
+                                fin18B = eighteenB / eighteenb;
+                            }
+
+                        } else {
+                            Utils.showToast("Once you add your fare data, you'll be able to visualize it here", getBaseContext());
+                            noData = true;
+                        }
+
+
+                    }
+
+//                    Checking if data exist for either last week or this week. Avoid calculations if there's no current data
+                    if (!noData) {
+
+                       /* TODO The order of the entries when being added to the entries array determines their position around the center
+                          TODO of  the chart.*/
+
+
+//                    Setting up chart data for this week
+                        if (sixA != 0) {
+
+                            entries1.add(new RadarEntry(fin6));
+                        } else {
+                            entries1.add(new RadarEntry(0));
+                        }
+                        if (nineA != 0) {
+
+                            entries1.add(new RadarEntry(fin9));
+                        } else {
+                            entries1.add(new RadarEntry(0));
+                        }
+                        if (twelveA != 0) {
+                            Log.e("twelve", fin12 + "");
+                            entries1.add(new RadarEntry(fin12));
+
+                        } else {
+                            entries1.add(new RadarEntry(0));
+                        }
+                        if (fifteenA != 0) {
+                            entries1.add(new RadarEntry(fin15));
+                            Log.e("15", fin15 + "");
+
+                        } else {
+                            entries1.add(new RadarEntry(0));
+                        }
+                        if (eighteenA != 0) {
+
+                            entries1.add(new RadarEntry(fin18));
+                        }
+
+//                    Setting up chart data for last week
+
+                        if (sixB != 0) {
+
+                            entries2.add(new RadarEntry(fin6B));
+                        } else {
+                            entries2.add(new RadarEntry(0));
+                        }
+                        if (nineB != 0) {
+
+                            entries2.add(new RadarEntry(fin9B));
+                        } else {
+                            entries2.add(new RadarEntry(0));
+                        }
+                        if (twelveB != 0) {
+
+                            entries2.add(new RadarEntry(fin12B));
+                        } else {
+                            entries2.add(new RadarEntry(0));
+                        }
+                        if (fifteenB != 0) {
+
+                            entries2.add(new RadarEntry(fin15B));
+                        } else {
+                            entries2.add(new RadarEntry(0));
+                        }
+                        if (eighteenB != 0) {
+
+                            entries2.add(new RadarEntry(fin18B));
+                        } else {
+                            entries2.add(new RadarEntry(0));
+                        }
+                    }
+
+                    RadarDataSet set1 = new RadarDataSet(entries1, "This Week");
+                    set1.setColor(Color.rgb(103, 110, 129));
+                    set1.setFillColor(Color.rgb(103, 110, 129));
+                    set1.setDrawFilled(true);
+                    set1.setFillAlpha(180);
+                    set1.setLineWidth(2f);
+                    set1.setDrawHighlightCircleEnabled(true);
+                    set1.setDrawHighlightIndicators(false);
+
+
+                    RadarDataSet set2 = new RadarDataSet(entries2, "Last Week");
+                    set2.setColor(Color.rgb(121, 162, 175));
+                    set2.setFillColor(Color.rgb(121, 162, 175));
+                    set2.setDrawFilled(true);
+                    set2.setFillAlpha(180);
+                    set2.setLineWidth(2f);
+                    set2.setDrawHighlightCircleEnabled(true);
+                    set2.setDrawHighlightIndicators(false);
+
+
+                    ArrayList<IRadarDataSet> sets = new ArrayList<IRadarDataSet>();
+
+                    boolean current = false, previous = false;
+                    if (!((fin6 == 0) && (fin9 == 0) && (fin12 == 0) && (fin15 == 0) && fin18 == 0)) {
+                        current = true;
+                        sets.add(set1);
+                    }
+                    if (!((fin6B == 0) && (fin9B == 0) && (fin12B == 0) && (fin15B == 0) && fin18B == 0)) {
+                        previous = true;
+                        sets.add(set2);
+                    }
+
+                    if (current || previous) {
+                        RadarData data = new RadarData(sets);
+                        data.setValueTypeface(mTfLight);
+                        data.setValueTextSize(8f);
+                        data.setDrawValues(false);
+                        data.setValueTextColor(Color.WHITE);
+
+                        mChart.setData(data);
+                        mChart.invalidate();
+                    }
+
+
+//                    drawChart(doublers, xVal);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Getting data error", "Error: " + error.getMessage());
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting params to register url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("user_id", "9");
+
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+    }
 
 }
 

@@ -21,10 +21,14 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.digitalmatatus.twigatatu.controllers.PostData;
 import com.digitalmatatus.twigatatu.views.CaptureService;
 import com.digitalmatatus.twigatatu.R;
 
 import java.util.HashMap;
+import java.util.Map;
+
+import Interface.ServerCallback;
 
 
 /**
@@ -41,9 +45,30 @@ public class Utils {
 
     }
 
+    //JWT Authentication headers
+    public static Map<String, String> jwtAuthHeaders(String token) {
+        Map<String, String> headers = new HashMap<String, String>();
+        headers.put("Content-Type", "application/json; charset=utf-8");
+        String auth = "jwt " + token;
+        headers.put("Authorization", auth);
+        return headers;
+    }
+
     public static void set(String username, String password, Context context) {
         setDefaults("username", username, context);
         setDefaults("password", password, context);
+    }
+
+    public static void getToken(Context ctx, ServerCallback callback) {
+        Map<String, String> credentials = new HashMap<String, String>();
+
+       /* credentials.put("username", Utils.getDefaults("username", ctx));
+        credentials.put("password", Utils.getDefaults("password", ctx));*/
+//       TODO Remove below. Only for testing purposes
+        credentials.put("username", "test");
+        credentials.put("password", "Medic2018");
+        PostData postData = new PostData(ctx);
+        postData.post2("auth/jwt/create/", credentials, null, null, callback);
     }
 
     //    Basic Aunthentication headers

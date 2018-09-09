@@ -835,7 +835,7 @@ public class CaptureActivity extends AppCompatActivity implements ICaptureActivi
         pd.show();
         pd.setCancelable(false);
         GetData stops = new GetData(getBaseContext());
-        stops.online_stops("stops", new ServerCallback() {
+        stops.get("stops", new ServerCallback() {
             @Override
             public void onSuccess(String result) {
                 Log.e("result", result.toString());

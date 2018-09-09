@@ -1,6 +1,5 @@
 package com.digitalmatatus.twigatatu.views;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
@@ -8,13 +7,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Looper;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -34,7 +31,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -43,7 +39,6 @@ import Interface.ServerCallback;
 import com.digitalmatatus.twigatatu.R;
 import com.digitalmatatus.twigatatu.controllers.GetData;
 import com.digitalmatatus.twigatatu.controllers.PostData;
-import com.digitalmatatus.twigatatu.model.Post;
 import com.digitalmatatus.twigatatu.utils.Util;
 import com.digitalmatatus.twigatatu.utils.Utils;
 
@@ -203,7 +198,7 @@ public class NewActivity extends AppCompatActivity {
         pd.show();
         pd.setCancelable(false);
         GetData getData = new GetData(NewActivity.this);
-        getData.online_stops("routes/", new ServerCallback() {
+        getData.get("routes/", new ServerCallback() {
             @Override
             public void onSuccess(String result) {
                 try {

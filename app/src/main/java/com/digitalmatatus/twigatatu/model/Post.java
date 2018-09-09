@@ -145,4 +145,79 @@ public class Post {
         }
     }
 
+    public static void PostStringLogin(String url, final Map<String, String> parameters, final Map<String, String> headers, final VolleyCallback callback) {
+
+        StringRequest req = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        callback.onSuccessResponse(response);
+                    }
+                }, new Error()) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                if (parameters != null) {
+                    params = parameters;
+                }
+
+
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> header = new HashMap<String, String>();
+
+                if (headers != null) {
+                    setRetryPolicy(new DefaultRetryPolicy(5 * DefaultRetryPolicy.DEFAULT_TIMEOUT_MS, 0, 0));
+                    setRetryPolicy(new DefaultRetryPolicy(0, 0, 0));
+                    header = headers;
+                }
+
+                return header;
+            }
+        };
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(req);
+        Log.e("request is:", req.toString());
+
+    }
+
+
+    public static void PostJSONLogin(String url, JSONObject parameter, final Map<String, String> headers, final VolleyCallback callback) {
+
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, parameter,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        callback.onSuccessResponse(response);
+                    }
+                }, new Error()) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> header = new HashMap<String, String>();
+
+                setRetryPolicy(new DefaultRetryPolicy(5 * DefaultRetryPolicy.DEFAULT_TIMEOUT_MS, 0, 0));
+                setRetryPolicy(new DefaultRetryPolicy(0, 0, 0));
+                header = headers;
+
+                return header;
+            }
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+        };
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(req);
+        Log.e("request is", req.toString());
+
+    }
+
+
 }

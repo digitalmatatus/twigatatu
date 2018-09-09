@@ -1,5 +1,6 @@
 package com.digitalmatatus.twigatatu.views;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -29,16 +30,23 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 
 import Interface.ServerCallback;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import com.digitalmatatus.twigatatu.R;
 import com.digitalmatatus.twigatatu.controllers.GetData;
+import com.digitalmatatus.twigatatu.model.Fares;
 import com.digitalmatatus.twigatatu.utils.Utils;
 
 import static com.digitalmatatus.twigatatu.utils.Utils.applyFontForToolbarTitle;
+import static com.digitalmatatus.twigatatu.utils.Utils.getToken;
+import static com.digitalmatatus.twigatatu.utils.Utils.jwtAuthHeaders;
+import static com.digitalmatatus.twigatatu.utils.Utils.set;
+import static com.digitalmatatus.twigatatu.utils.Utils.showToast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -59,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> routeIDs = new ArrayList<>();
 
 
+    @SuppressLint("WrongConstant")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +76,52 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         setTitle("Twiga Tatu");
         applyFontForToolbarTitle(this);
+
+        set("test", "Medic2018", getBaseContext());
+
+        getToken(getBaseContext(), new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+//                    TODO remove this log - insecure
+                Log.e("jwt token", result);
+                JSONObject jsonObject;
+                try {
+                    jsonObject = new JSONObject(result);
+                    String token = jsonObject.getString("token");
+
+                    GetData budget = new GetData(getBaseContext());
+
+                    budget.online_data("fares/budget", null, jwtAuthHeaders(token), new ServerCallback(){
+                        @Override
+                        public void onSuccess(String result) {
+                            Log.e("result string", result);
+                        }
+
+                        @Override
+                        public void onSuccess(JSONObject response) {
+                            Log.e("result,", response.toString());
+                        }
+                    });
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.e("getting token error", "token error");
+
+                    showToast("Please enter the correct credentials", getBaseContext());
+
+                    Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                    intent.putExtra("error", e.toString());
+                    startActivity(intent);
+                }
+
+            }
+
+            @Override
+            public void onSuccess(JSONObject response) {
+
+            }
+        });
 
 
         if (!Utils.checkDefaults("continuation_dc", getBaseContext())) {
@@ -216,11 +271,20 @@ public class MainActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                if (amnt > 0 && !stop_from.getText().toString().equals(null) && !stop_from.getText().toString().equals(null)) {
+                if (amnt > 0 && !stop_from.getText().toString().equals(null) && !stop_to.getText().toString().equals(null)) {
+
+//                    Saving fares offline for visualization
+                    Fares fares = new Fares();
+                    fares.setFare(amnt);
+                    fares.setStopFrom(stop_from.getText().toString());
+                    fares.setStopFrom(stop_to.getText().toString());
+                    fares.setTimestamp(new Timestamp(System.currentTimeMillis()));
+                    fares.save();
+
                     intent.putExtra("fare", fare.toString());
                     startActivity(intent);
                 } else {
-                    Utils.showToast("Please fill all the fields", getBaseContext());
+                    showToast("Please fill all the fields", getBaseContext());
                 }
 
             }
@@ -254,7 +318,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void showStops() {
         GetData stops = new GetData(getBaseContext());
-        stops.online_stops("stops", new ServerCallback() {
+        stops.get("stops", new ServerCallback() {
             @Override
             public void onSuccess(String result) {
                 Log.e("result", result.toString());
@@ -341,7 +405,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (et.getText().toString().equals("dm2018")) {
                     Utils.setDefaults("data_collection", "enabled", getBaseContext());
-                    Utils.showToast("Data collection mode enabled!", getBaseContext());
+                    showToast("Data collection mode enabled!", getBaseContext());
                     Intent intent = new Intent(getBaseContext(), MainActivity2.class);
                     startActivity(intent);
                 } else {

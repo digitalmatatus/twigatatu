@@ -10,17 +10,14 @@ import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Menu;
@@ -61,7 +58,6 @@ import Interface.ServerCallback;
 
 import static com.digitalmatatus.twigatatu.utils.Utils.applyFontForToolbarTitle;
 import static com.digitalmatatus.twigatatu.utils.Utils.sentEmail;
-import static com.digitalmatatus.twigatatu.utils.Utils.set;
 import static com.digitalmatatus.twigatatu.utils.Utils.setClipboard;
 
 public class MainActivity2 extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -559,7 +555,7 @@ public class MainActivity2 extends AppCompatActivity implements GoogleApiClient.
         pd.show();
         pd.setCancelable(false);
         GetData getData = new GetData(MainActivity2.this);
-        getData.online_stops("routes/", new ServerCallback() {
+        getData.get("routes/", new ServerCallback() {
             @Override
             public void onSuccess(String result) {
                 try {
