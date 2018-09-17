@@ -2,8 +2,12 @@ package com.digitalmatatus.twigatatu.model;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -16,6 +20,7 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
@@ -23,6 +28,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import Interface.VolleyCallback;
+
+import com.digitalmatatus.twigatatu.R;
 import com.digitalmatatus.twigatatu.utils.AppController;
 import com.digitalmatatus.twigatatu.utils.Utils;
 import com.digitalmatatus.twigatatu.views.ErrorActivity;
@@ -123,12 +130,23 @@ public class Post {
                             HttpHeaderParser.parseCharset(response.headers, "utf-8"));
                     // Now you can use any deserializer to make sense of data
 //                    TODO change this to be back to an object
-//                    JSONObject obj = new JSONObject(res);
+                    JSONObject obj = new JSONObject(res);
                     Log.e("obj", res);
+
+                    Toast ToastMessage = Toast.makeText(context, obj.toString(), Toast.LENGTH_SHORT);
+                    View toastView = ToastMessage.getView();
+                    toastView.setBackgroundResource(R.drawable.toast_background_color);
+                    TextView text = toastView.findViewById(android.R.id.message);
+                    text.setTextColor(Color.WHITE);
+
+                    ToastMessage.show();
+
                 } catch (UnsupportedEncodingException e1) {
                     // Couldn't properly decode data to string
                     Log.e("e1", e1.toString());
                     e1.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
                 /*catch (JSONException e2) {
                     // returned data is not JSONObject?
@@ -137,15 +155,15 @@ public class Post {
                 }*/
             }
 
-            Utils.showToast("Could not upload your data due to malfunctioned data you collected",context);
 
-            Intent intent = new Intent(context, ErrorActivity.class);
-            context.startActivity(intent);
+            /*Intent intent = new Intent(context, ErrorActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);*/
 
         }
     }
 
-    public static void PostStringLogin(String url, final Map<String, String> parameters, final Map<String, String> headers, final VolleyCallback callback) {
+    public static void PostStringJWT(String url, final Map<String, String> parameters, final Map<String, String> headers, final VolleyCallback callback) {
 
         StringRequest req = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -186,7 +204,7 @@ public class Post {
     }
 
 
-    public static void PostJSONLogin(String url, JSONObject parameter, final Map<String, String> headers, final VolleyCallback callback) {
+    public static void PostJSONJWT(String url, JSONObject parameter, final Map<String, String> headers, final VolleyCallback callback) {
 
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, parameter,
                 new Response.Listener<JSONObject>() {

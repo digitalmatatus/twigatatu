@@ -62,11 +62,11 @@ public class Utils {
     public static void getToken(Context ctx, ServerCallback callback) {
         Map<String, String> credentials = new HashMap<String, String>();
 
-       /* credentials.put("username", Utils.getDefaults("username", ctx));
-        credentials.put("password", Utils.getDefaults("password", ctx));*/
+        credentials.put("username", Utils.getDefaults("username", ctx));
+        credentials.put("password", Utils.getDefaults("password", ctx));
 //       TODO Remove below. Only for testing purposes
-        credentials.put("username", "test");
-        credentials.put("password", "Medic2018");
+        /*credentials.put("username", "test");
+        credentials.put("password", "Medic2018");*/
         PostData postData = new PostData(ctx);
         postData.post2("auth/jwt/create/", credentials, null, null, callback);
     }

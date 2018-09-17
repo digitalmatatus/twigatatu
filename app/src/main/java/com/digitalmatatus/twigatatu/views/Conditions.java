@@ -158,6 +158,7 @@ public class Conditions extends AppCompatActivity implements TimePickerDialog.On
                     fares.put("travel_time", editText.getText().toString());
                     Intent intent = new Intent(getBaseContext(), RideConditions.class);
                     intent.putExtra("fare", fares.toString());
+                    intent.putExtra("token", getIntent().getStringExtra("token"));
                     startActivity(intent);
 
                 } catch (JSONException e) {

@@ -56,7 +56,7 @@ public class PostData {
 
         if (parameters != null) {
             Post post = new Post(context);
-            post.PostStringLogin("http://41.89.64.3/ma3tycoon/" + t_url, parameters,headers, new VolleyCallback() {
+            post.PostStringJWT("http://41.89.64.3/ma3tycoon/" + t_url, parameters,headers, new VolleyCallback() {
                 @Override
                 public void onSuccessResponse(String result) {
                     callback.onSuccess(result);
@@ -69,7 +69,7 @@ public class PostData {
         } else {
 
             Post post = new Post(context);
-            post.PostJSONLogin("http://41.89.64.3/ma3tycoon/" +t_url, params,headers, new VolleyCallback() {
+            post.PostJSONJWT("http://41.89.64.3/ma3tycoon/" +t_url, params,headers, new VolleyCallback() {
                 @Override
                 public void onSuccessResponse(String result) {
                 }

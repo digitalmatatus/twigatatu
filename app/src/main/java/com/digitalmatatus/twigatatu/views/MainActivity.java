@@ -32,6 +32,7 @@ import org.json.JSONObject;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import Interface.ServerCallback;
@@ -76,52 +77,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         setTitle("Twiga Tatu");
         applyFontForToolbarTitle(this);
-
-        set("test", "Medic2018", getBaseContext());
-
-        getToken(getBaseContext(), new ServerCallback() {
-            @Override
-            public void onSuccess(String result) {
-//                    TODO remove this log - insecure
-                Log.e("jwt token", result);
-                JSONObject jsonObject;
-                try {
-                    jsonObject = new JSONObject(result);
-                    String token = jsonObject.getString("token");
-
-                    GetData budget = new GetData(getBaseContext());
-
-                    budget.online_data("fares/budget", null, jwtAuthHeaders(token), new ServerCallback(){
-                        @Override
-                        public void onSuccess(String result) {
-                            Log.e("result string", result);
-                        }
-
-                        @Override
-                        public void onSuccess(JSONObject response) {
-                            Log.e("result,", response.toString());
-                        }
-                    });
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Log.e("getting token error", "token error");
-
-                    showToast("Please enter the correct credentials", getBaseContext());
-
-                    Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                    intent.putExtra("error", e.toString());
-                    startActivity(intent);
-                }
-
-            }
-
-            @Override
-            public void onSuccess(JSONObject response) {
-
-            }
-        });
+        getBudget();
 
 
         if (!Utils.checkDefaults("continuation_dc", getBaseContext())) {
@@ -282,6 +238,7 @@ public class MainActivity extends AppCompatActivity {
                     fares.save();
 
                     intent.putExtra("fare", fare.toString());
+                    intent.putExtra("token", getIntent().getStringExtra("token"));
                     startActivity(intent);
                 } else {
                     showToast("Please fill all the fields", getBaseContext());
@@ -432,5 +389,89 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
 
     }
+
+    private void getBudget() {
+        getToken(getBaseContext(), new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+//                    TODO remove this log - insecure
+                Log.e("jwt token", result);
+                final JSONObject jsonObject;
+                try {
+                    jsonObject = new JSONObject(result);
+                    String token = jsonObject.getString("token");
+
+                    GetData budget = new GetData(getBaseContext());
+
+                    budget.online_data("fares/budget", null, jwtAuthHeaders(token), new ServerCallback() {
+                        @Override
+                        public void onSuccess(String result) {
+                            Log.e("result string", result);
+                            Calendar cal = Calendar.getInstance();
+                            int cur_week = cal.get(Calendar.WEEK_OF_YEAR);
+                            Log.e(" cur week is ", cur_week + "");
+
+                            try {
+
+
+                                JSONObject jsonObject = new JSONObject(result);
+                                JSONArray jsonArray = jsonObject.getJSONArray("result");
+                                Log.e("Expenditure Array", jsonArray.toString());
+
+//                    TODO .. calculate if we have data for last week the assign the boolean last week
+                                boolean noData = false;
+
+
+                                for (int i = 0; i < jsonArray.length(); i++) {
+
+                                    JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                                    Log.e("week SERVER",jsonObject1.getInt("week")+"");
+                                    int week = 2;
+
+                                    String[] splitTime = jsonObject1.getString("travel_time").split(":");
+                                    String timeHour = splitTime[0];
+
+                                    int hours = Integer.parseInt(timeHour);
+
+                                    Log.e("casted hour", hours + "");
+
+                                    if (week == jsonObject1.getInt("week"))
+                                        week = 1;
+                                }
+
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onSuccess(JSONObject response) {
+                            Log.e("result,", response.toString());
+
+                        }
+                    });
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.e("getting token error", "token error");
+
+                    showToast("Please enter the correct credentials", getBaseContext());
+
+                    Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                    intent.putExtra("error", e.toString());
+                    startActivity(intent);
+                }
+
+            }
+
+            @Override
+            public void onSuccess(JSONObject response) {
+
+            }
+        });
+    }
+
 
 }
